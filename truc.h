@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 #include "station.h"
 #include "connexion.h"
 #include "coord.h"
 
+=======
+#include <station.h>
+#include <connexion.h>  
+#include <coord.h>
+>>>>>>> f5643d8b0aef09181db17b1feded2d5d22872d08
 
 typedef enum _ttype {STA, CON} Ttype;
 
