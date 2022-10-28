@@ -1,4 +1,5 @@
-#include 
+#include <truc.h>
+#include <coord.h> 
 
 typedef struct _un_noeud {
 	Un_truc *truc; 			//Une station ou une connexion
