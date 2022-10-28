@@ -12,6 +12,7 @@ Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 	Un_truc new = (Un_truc*)malloc(sizeof(Un_truc));
 	new->coord = coord;
 	new->data = data;
+	new->type = type;
 	new->user_val = uv;
 	return new;
 }
