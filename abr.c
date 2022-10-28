@@ -1,20 +1,31 @@
 #include <stdlib>
+#include <string.h>
 
-#include <truc.h>
-#include <abr_type.h>
+#include "truc.h"
+#include "abr_type.h"
+
+
 
 Un_nabr *creer_nabr(Un_truc *truc) {
     Un_nabr * nabr = (Un_nabr * ) malloc(sizeof(Un_nabr));
     nabr->g = NULL;
     nabr->d = NULL;
-    nabr-> truc = truc; 
+    nabr->truc = truc; 
 
     return nabr;
 }
 
 
 
-Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {}
+Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
+    if(!n) return abr;
+    if(!abr) return n; 
+
+    if(strcmp(n->truc->data->nom, abr->truc->data->nom)){
+
+    }
+
+}
 
 
 
@@ -24,7 +35,7 @@ Un_nabr *construire_abr(Un_elem *liste_sta);{}
 
 void detruire_abr(Un_nabr *abr);{
     if (! abr) retrun; 
-    
+
     if (!abr->d && !abr->g) 
         free(abr); 
     

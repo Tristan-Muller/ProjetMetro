@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <string.h>
+
+
 
 //Mertro : RENNES /////////////////////////////////////
 
@@ -34,7 +38,7 @@
 //   git checkout master (ou main)
 
 
-//Clé GIT : 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
+//Clé GIT : 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
 
 
 
@@ -119,3 +123,9 @@ typedef struct _un_noeud {
     struct _un_noeud *ne; //Fils pour quart NE
     struct _un_noeud *se; //Fils pour quart SE
 } Un_noeud; 
+
+
+int main(){
+    printf("%d\n", strcmp("a", "ba"));
+    return 0;
+}
