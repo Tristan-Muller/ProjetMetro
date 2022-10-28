@@ -28,10 +28,13 @@
 
 
 
+//GIT///////////////////////////////////////////////////
+
+//Command : 
+//   git checkout master (ou main)
 
 
-//Clé GIT : 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
-//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
+//Clé GIT : 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
 
 
 
