@@ -1,3 +1,6 @@
+#include <station.h>
+#include <connexion.h>  
+
 typedef enum _ttype {STA, CON} Ttype;
 
 typedef union _data {
