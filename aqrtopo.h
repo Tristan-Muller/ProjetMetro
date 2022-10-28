@@ -1,3 +1,5 @@
+#include 
+
 typedef struct _un_noeud {
 	Un_truc *truc; 			//Une station ou une connexion
 	Une_coord limite_no; 	//Limite zone
