@@ -135,3 +135,4 @@ int main(){
 	return 0;
 }
 
+/* Exercice 1 à terminer, qq fonction à verif et à mettre dans le main */
