@@ -7,7 +7,10 @@
 
 
 Un_nabr *creer_nabr(Un_truc *truc) {
+    /*Fonction de création d'un noeud d'arbre binaire de recherche*/
+
     Un_nabr * nabr = (Un_nabr * ) malloc(sizeof(Un_nabr));
+
     nabr->g = NULL;
     nabr->d = NULL;
     nabr->truc = truc; 
@@ -18,6 +21,8 @@ Un_nabr *creer_nabr(Un_truc *truc) {
 
 
 Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
+    /*Fonction d'insertion d'un noeud dans un ABR*/
+
     if(!n) return abr;
     if(!abr) return n; 
 
@@ -31,6 +36,8 @@ Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
 
 
 Un_nabr *construire_abr(Un_elem *liste_sta) {
+    /*Fonction de création d'un ABR à partir d'une liste de stations*/
+
     if(! liste_sta) return NULL;
 
     Un_nabr n = creer_nabr(*liste_sta);
@@ -42,6 +49,8 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 
 
 void detruire_abr(Un_nabr *abr) {
+    /*Fonction de destruction d'un ABR*/
+
     if (! abr) retrun; 
 
     if (!abr->d && !abr->g) 
@@ -52,8 +61,11 @@ void detruire_abr(Un_nabr *abr) {
         if (abr->g) detruire_abr(abr->g);
     }
     
+    free(abr);
 }
 
 
 
-Un_truc *chercher_station(Un_nabr *abr, char *nom); {}
+Un_truc *chercher_station(Un_nabr *abr, char *nom); {
+    /*Fonction permettant de rechercher une station dans un ABR*/
+}
