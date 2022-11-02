@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "coord.h"
 #include "station.h"
 #include "truc.h"
@@ -35,6 +36,12 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 	if((liste->truc->user_val)>(tmp->truc->user_val)){
 		tmp->suiv = liste;
 		return tmp;
+	}
+
+	//Cas général
+	while(((element->truc->user_val)<(tmp->truc->user_val))&&(element!=NULL)){
+		precedent = precedent->suiv;
+		element = element->suiv;
 	}
 
 	//Cas où la liste ne contient qu'un seul terme
