@@ -68,4 +68,19 @@ void detruire_abr(Un_nabr *abr) {
 
 Un_truc *chercher_station(Un_nabr *abr, char *nom); {
     /*Fonction permettant de rechercher une station dans un ABR*/
+
+    if (!abr) 
+        return NULL; 
+
+    int comp = strcmp(abr->truc->data.sta.nom,nom);
+
+    if(!comp)         //La fonction vaut 0 si les deux chaines sont égales
+        return abr;
+    
+    if (comp<0)
+        return chercher_station(abr->d, nom);           //Elle est négative si s1<s2
+    
+    else 
+        return chercher_station(abr->g, nom);           //Positive si s1>s2
+
 }

@@ -6,6 +6,7 @@
 #include "liste.h"
 #include "truc.c"
 
+
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
@@ -56,6 +57,7 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 }
 
 
+
 void ecrire_liste(FILE *flux, Un_elem *liste){
 	Un_elem* tete = liste;
 	float lon,lat;
@@ -75,6 +77,7 @@ void ecrire_liste(FILE *flux, Un_elem *liste){
 }
 
 
+
 void detruire_liste(Un_elem* liste){
 	if(liste->suiv==NULL){
 		detruire_truc(liste->truc);
@@ -83,6 +86,7 @@ void detruire_liste(Un_elem* liste){
 	detruire_truc(liste->truc);
 	detruire_liste(liste->suiv);
 }
+
 
 
 Un_elem *lire_stations(char *station){
@@ -118,6 +122,7 @@ Un_elem *lire_stations(char *station){
 }
 return new_stat;
 }
+
 
 
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
