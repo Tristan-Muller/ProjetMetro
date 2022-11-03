@@ -1,6 +1,7 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
+#include "ligne.h"
 #include "ligne.c"
 
 
@@ -72,6 +73,7 @@
 
 //TYPEDEF : ///////////////////////////////////////////////////////////////////////////////////////
 
+/*
 typedef struct _une_coord {
     float lon; //Longitude decimale
     float lat; //Latitude decimale
@@ -151,6 +153,8 @@ typedef struct _un_noeud {
     struct _un_noeud *se; //Fils pour quart SE
 } Un_noeud; 
 
+
+*/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -19,8 +19,8 @@ Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 
 
 
-void detruire_truc(Une_truc *truc){
-	if(truc->type = STA){
+void detruire_truc(Un_truc *truc){
+	if(truc->type == STA){
 		free(truc->data.sta.nom);
 		free(truc->data.sta.tab_con);
 	}

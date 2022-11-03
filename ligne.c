@@ -1,29 +1,39 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include "coord.h"
+#include "station.h"
+#include "truc.h"
+#include "liste.h"
+#include "truc.c"
 
 Une_ligne *lire_lignes(char *nom_fichier){
 
-    FILE* fichier = NULL;
-    int i =0;
+    FILE* fic = NULL;
  
-    char tab[200]={0};
+    char code;
+    int v_moy = 0; 
+    float interval = 0;
+    char color[15];
  
-    fichier = fopen("ligne.csv", "r");
- 
-    if (fichier != NULL)
-    {
-       for(i = 0; i < 200; i++)
-       {
-       fscanf(fichier, "%hhd ", &tab[i]);
-       }
-        fclose(fichier);
-    }
+    fic = fopen(nom_fichier, "r");
 
-    for(i=0; i<200; i++){
-        printf("%c\t", tab[i]);
-    }
+    if (!fic) return NULL; 
+
+    fscanf(fic, "%c;%d;%f;%s", &code, &v_moy, &interval, color);
+
+    printf("\nCode : %c\nVitesse : %d\nIntervalle : %f\nCouleur : %s", code, v_moy, interval, color);
+
+    
+    fscanf(fic, "%c;%d;%f;%s", &code, &v_moy, &interval, color);
+
+    printf("\nCode : %c\nVitesse : %d\nIntervalle : %f\nCouleur : %s", code, v_moy, interval, color);
+     //Ne marche pas pour l'instant mais je teste 
+
+
+    fclose(fic);
+    
  
-    return 0;
- 
+    return NULL;
 }
 
 
@@ -36,4 +46,6 @@ void detruire_lignes(Une_ligne *lligne){}
 
 
 
-Une_ligne *chercher_ligne(Une_ligne *lligne, char *code){} 
+Une_ligne *chercher_ligne(Une_ligne *lligne, char *code){
+    return NULL;
+} 
