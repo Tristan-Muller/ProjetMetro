@@ -6,13 +6,17 @@
 #include "liste.h"
 #include "truc.c"
 
-
+/*Exercice 1 */
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
 void detruire_liste_et_truc(Un_elem *liste);
 Un_elem *lire_stations(char *station);
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
+
+/*Exercice 4*/
+Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
+
 
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
@@ -129,9 +133,16 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 	}
 }
 
+/* Exercice 4 : CONNEXION */
+Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
+	Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
+	deb->truc = truc;
+	deb->suiv = liste;
+	return deb;
+}
 
 
-
+/* main à compléter */
 int main(){
 	Un_elem* station = lire_stations("-1.711154;48.121348;J.F Kennedy");	//A tester !
 	free(station);
