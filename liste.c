@@ -60,20 +60,18 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 void ecrire_liste(FILE *flux, Un_elem *liste){
 	Un_elem* tete = liste;
-	float lon,lat;
-	char nom_stat[100];
-	FILE* fichier = NULL;
-	fichier = fopen("flux.csv","w");
-	while(tete!=NULL){
-		printf("Longitude : ");
-		scanf("%f", &lon);
-		printf("Latitude : ");
-		scanf("%f", &lat);
-		printf("Nom de la station : ");
-		scanf("%s", nom_stat);
-		fprintf(fichier,"%f;%f;%s\n", lon,lat,nom_stat); //A verif, Je ne sais pas quoi mettre dedans car ils disent d'écrire mais d'afficher alors...
+	flux = fopen("flux","w");
+	if(flux==NULL){
+		printf("Le documents n'existe pas");
+		return;
 	}
-	fclose(fichier);
+
+	while(tete!=NULL){
+		fprintf(flux,"%f;%f;%s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom); //A verif, Je ne sais pas quoi mettre dedans car ils disent d'écrire mais d'afficher alors...
+		tete = tete->suiv;
+	}
+
+	fclose(flux);
 }
 
 
@@ -91,9 +89,9 @@ void detruire_liste(Un_elem* liste){
 
 Un_elem *lire_stations(char *station){
 	Un_elem* new_stat = (Un_elem*)malloc(sizeof(Un_elem));
-	char new_float_lon[100];
-	char new_float_lat[100];
-	char new_char[100];
+	char new_float_lon[101];
+	char new_float_lat[101];
+	char new_char[101];
 	int k = 0;
 	int j = 0;
 
@@ -127,7 +125,7 @@ return new_stat;
 
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 	if((liste->truc->coord.lon<limite_no->lon)||(liste->truc->coord.lon>limite_se->lon)||(liste->truc->coord.lat<limite_se->lat)||(liste->truc->coord.lat>limite_no->lat)){
-		printf("La station ou connexion sort de la delimitation, impossible de créer cette station ou connexion");
+		printf("La station ou la connexion sort de la delimitation, impossible de créer cette station ou connexion");
 	}
 }
 
