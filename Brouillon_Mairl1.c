@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "ligne.c"
 
 
 
@@ -154,6 +155,6 @@ typedef struct _un_noeud {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(){
-    printf("%d\n", strcmp("a", "ba"));
+    lire_lignes("ligne.csv");
     return 0;
 }

@@ -7,15 +7,19 @@ Une_ligne *lire_lignes(char *nom_fichier){
  
     char tab[200]={0};
  
-    fichier = fopen("nombres.csv", "r");
+    fichier = fopen("ligne.csv", "r");
  
     if (fichier != NULL)
     {
        for(i = 0; i < 200; i++)
        {
-       fscanf(fichier, "%f ", &tableau[i]);
+       fscanf(fichier, "%hhd ", &tab[i]);
        }
         fclose(fichier);
+    }
+
+    for(i=0; i<200; i++){
+        printf("%c\t", tab[i]);
     }
  
     return 0;
