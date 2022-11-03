@@ -62,7 +62,7 @@ void ecrire_liste(FILE *flux, Un_elem *liste){
 	Un_elem* tete = liste;
 	flux = fopen("flux","w");
 	if(flux==NULL){
-		printf("Le documents n'existe pas");
+		printf("Le document n'existe pas");
 		return;
 	}
 
