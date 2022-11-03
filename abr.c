@@ -3,13 +3,15 @@
 
 #include "truc.h"
 #include "abr_type.h"
+#include "liste.h"
+
 
 
 
 Un_nabr *creer_nabr(Un_truc *truc) {
     /*Fonction de création d'un noeud d'arbre binaire de recherche*/
 
-    Un_nabr * nabr = (Un_nabr * ) malloc(sizeof(Un_nabr));
+    Un_nabr* nabr = (Un_nabr * ) malloc(sizeof(Un_nabr));
 
     nabr->g = NULL;
     nabr->d = NULL;
@@ -40,8 +42,8 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 
     if(! liste_sta) return NULL;
 
-    Un_nabr n = creer_nabr(*liste_sta);
-    n = inserer_abr(n, construire_abr(*(liste_sta+1)));
+    Un_nabr* n = creer_nabr(liste_sta->truc); 
+    n = inserer_abr(n, construire_abr(liste_sta->suiv)); //Tu avais mis *liste_sta +1 mais ce n'est pas un nombre donc je pense que t'avais voulu dire suivant
 
     return n;
 }
@@ -51,7 +53,7 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 void detruire_abr(Un_nabr *abr) {
     /*Fonction de destruction d'un ABR*/
 
-    if (! abr) retrun; 
+    if (! abr) return; 
 
     if (!abr->d && !abr->g) 
         free(abr); 
@@ -66,7 +68,7 @@ void detruire_abr(Un_nabr *abr) {
 
 
 
-Un_truc *chercher_station(Un_nabr *abr, char *nom); {
+Un_truc *chercher_station(Un_nabr *abr, char *nom){
     /*Fonction permettant de rechercher une station dans un ABR*/
 
     if (!abr) 
@@ -75,7 +77,7 @@ Un_truc *chercher_station(Un_nabr *abr, char *nom); {
     int comp = strcmp(abr->truc->data.sta.nom,nom);
 
     if(!comp)         //La fonction vaut 0 si les deux chaines sont égales
-        return abr;
+        return abr->truc;
     
     if (comp<0)
         return chercher_station(abr->d, nom);           //Elle est négative si s1<s2

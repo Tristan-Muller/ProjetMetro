@@ -61,10 +61,10 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 void ecrire_liste(FILE *flux, Un_elem *liste){
 	Un_elem* tete = liste;
 	float lon,lat;
-	char* nom_stat;
+	char nom_stat[100];
 	FILE* fichier = NULL;
 	fichier = fopen("flux.csv","w");
-	while(liste!=NULL){
+	while(tete!=NULL){
 		printf("Longitude : ");
 		scanf("%f", &lon);
 		printf("Latitude : ");
@@ -91,13 +91,13 @@ void detruire_liste(Un_elem* liste){
 
 Un_elem *lire_stations(char *station){
 	Un_elem* new_stat = (Un_elem*)malloc(sizeof(Un_elem));
-	char* new_float_lon;
-	char* new_float_lat;
-	char* new_char;
+	char new_float_lon[100];
+	char new_float_lat[100];
+	char new_char[100];
 	int k = 0;
 	int j = 0;
 
-	for (int i = 0; station[i]=!'\0'; ++i){
+	for (int i = 0; station[i]!='\0'; ++i){
 		if(station[i]==';'){
 			if((station[i-1]=='0')||(station[i-1]=='1')||(station[i-1]=='2')||(station[i-1]=='3')||(station[i-1]=='4')||(station[i-1]=='5')||(station[i-1]=='6')||(station[i-1]=='7')||(station[i-1]=='8')||(station[i-1]=='9')){
 				if(k==0){
