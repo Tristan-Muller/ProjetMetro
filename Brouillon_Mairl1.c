@@ -160,6 +160,8 @@ typedef struct _un_noeud {
 
 int main(){
     Une_ligne * lligne = lire_lignes("ligne.csv");
+    lligne = chercher_ligne(lligne, "A"); 
+    afficher_lignes(lligne);
     detruire_lignes(lligne);
     return 0;
 }
