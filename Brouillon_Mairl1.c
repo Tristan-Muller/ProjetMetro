@@ -159,6 +159,7 @@ typedef struct _un_noeud {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(){
-    lire_lignes("ligne.csv");
+    Une_ligne * lligne = lire_lignes("ligne.csv");
+    detruire_lignes(lligne);
     return 0;
 }
