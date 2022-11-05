@@ -112,6 +112,10 @@ Un_elem* lire_stations(char *nom_fichier){
 	while(fgets(new,50,flux)!=NULL){
 
 		Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
+		Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
+		Une_coord* coord = (Une_coord*)malloc(sizeof(Une_coord));
+		Une_station* stat = (Une_station*)malloc(sizeof(Une_station));
+
 
 		float lon, lat;
 		char* nom = (char*)malloc(50*sizeof(char));
@@ -131,7 +135,7 @@ Un_elem* lire_stations(char *nom_fichier){
 			i++;
 		}
 
-		sscanf(new,"%f;%f;",&lon,&lat);
+		sscanf(new,"%f;%f",&lon,&lat);
 		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", lon,lat,nom);
 		
 
@@ -173,14 +177,26 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-Un_elem *lire_connexions(char *nom_fichier, Une_ligne *liste_ligne, Un_nabr *abr_sta){
+void *lire_connexions(char *nom_fichier){
 	
+	FILE* flux = NULL;
+	flux = fopen(nom_fichier,"r");
+	if(flux==NULL){
+		printf("Erreur\n");
+	}
+	char* stat_dep = (char*)malloc(50*sizeof(char));
+	char* stat_arr = (char*)malloc(50*sizeof(char));
+	char* code = (char*)malloc(sizeof(char));
+	float temp;
+	sscanf("%c;%[^;];%[^;];%f\n", code, stat_dep, stat_arr, &temp);
+	printf("Ligne : %s ; Station de depart : %f", code, temp);
 }
 
 
 
 int main(){
 	lire_stations("flux.csv");	//A tester !
+	lire_connexions("connexion.csv");
 	return 0;
 }
 
