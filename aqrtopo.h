@@ -1,3 +1,4 @@
+
 #ifndef AQRTOPO_H
 #define AQRTOPO_H
 #include "truc.h"
@@ -13,5 +14,7 @@ typedef struct _un_noeud {
 	struct _un_noeud *se; 	//Fils pour quart SE
 } Un_noeud;
 
-#endifgit
+
+#endif
+
 //Arbre Quaternaire de recherche 
