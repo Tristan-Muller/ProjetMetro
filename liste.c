@@ -99,26 +99,24 @@ Un_elem* lire_stations(char *nom_fichier){
 	flux = fopen(nom_fichier,"r");
 	if(flux==NULL){
 		printf("Erreur\n");
+		return NULL;
 	}
 
 	Un_elem* deb = NULL;
 	Un_elem* tete = NULL;
 
 	char new[50];
-	int i=0;
-	int j=0;
-	int compt=0;
 
 	while(fgets(new,50,flux)!=NULL){
 
 		Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
-		Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
-		Une_coord* coord = (Une_coord*)malloc(sizeof(Une_coord));
-		Une_station* stat = (Une_station*)malloc(sizeof(Une_station));
-
-
+		Une_coord coord;
+		Tdata data;
 		float lon, lat;
 		char* nom = (char*)malloc(50*sizeof(char));
+		int i=0;
+		int j=0;
+		int compt=0;
 
 		//On va au 1er caractère du nom de la station (on sait qu'avant ça il y a 2 ';')
 		while(compt!=2){
@@ -138,12 +136,12 @@ Un_elem* lire_stations(char *nom_fichier){
 		sscanf(new,"%f;%f",&lon,&lat);
 		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", lon,lat,nom);
 		
-
-		liste->truc->coord.lon = lon;
-		liste->truc->coord.lat = lat;
-		strcpy(liste->truc->data.sta.nom, nom);
+		coord.lon = lon;
+		coord.lat = lat;
+		data.sta.nom = nom;
+		Un_truc* truc = creer_truc(coord, STA, data, 0.0); //User_val = 0 ?? 
+		liste->truc = truc;
 		free(nom);
-		//Problème : segmentation fault
 
 		if(deb==NULL){
 			deb=liste;
@@ -152,10 +150,6 @@ Un_elem* lire_stations(char *nom_fichier){
 			tete->suiv=liste;
 			tete=liste;
 		}
-
-		i=0;
-		j=0;
-		compt=0;
 	}
 
 	fclose(flux);
@@ -184,19 +178,74 @@ void *lire_connexions(char *nom_fichier){
 	if(flux==NULL){
 		printf("Erreur\n");
 	}
-	char* stat_dep = (char*)malloc(50*sizeof(char));
-	char* stat_arr = (char*)malloc(50*sizeof(char));
-	char* code = (char*)malloc(sizeof(char));
-	float temp;
-	sscanf("%c;%[^;];%[^;];%f\n", code, stat_dep, stat_arr, &temp);
-	printf("Ligne : %s ; Station de depart : %f", code, temp);
+
+	char new[100];
+
+	while(fgets(new,100,flux)!=NULL){
+
+		char* stat_dep = (char*)malloc(100*sizeof(char));
+		char* stat_arr = (char*)malloc(100*sizeof(char));
+		char code;
+		char* temp = (char*)malloc(100*sizeof(char));
+		char* endPtr;
+		int i=0;
+		int compt=0;
+		int x=0;
+		int y=0;
+		int z=0;
+		int w=0;
+
+		while(new[i]!='\n'){
+
+			if(new[i]==';'){
+				compt++;
+				i++;
+			}
+
+			if(compt==0){
+				code=new[i];
+				x++;
+			}
+
+			if(compt==1){
+				stat_dep[y]=new[i];
+				y++;
+			}
+
+			if(compt==2){
+				stat_arr[z]=new[i];
+				z++;
+			}
+
+			if(compt==3){
+				temp[w]=new[i];
+				w++;
+			}
+
+			i++;
+		}
+
+		//sscanf(";;;%f\n", &temp);
+		printf("Ligne=%c : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+		
+		free(stat_dep);	//Problème lors du free pour quelques gares rajoute 'ité' à la fin
+		free(stat_arr);
+		free(temp);
+	}
+	fclose(flux);
 }
+
 
 
 
 int main(){
 	lire_stations("flux.csv");	//A tester !
+
+	printf("\nFIN STATION\n\n");
+
 	lire_connexions("connexion.csv");
+
+	printf("\nFIN CONNEXION\n\n");
 	return 0;
 }
 
