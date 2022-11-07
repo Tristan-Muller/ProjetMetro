@@ -38,6 +38,8 @@ Une_ligne * ajout_ligne(Une_ligne *lligne, char *code_fic, float v_moy, float in
     } 
 
     
+    new->code = (char *) malloc(strlen(code_fic)*sizeof(char));
+    new->color = (char *) malloc(strlen(color_fic)*sizeof(char));
 
 
     strcpy(new->code, code_fic);                                         //On y ajoute les données
@@ -95,11 +97,17 @@ void detruire_lignes(Une_ligne *lligne){
 
     if(!lligne) return; 
 
-    if(!lligne->suiv) free(lligne);
+    if(!lligne->suiv){ 
+        free(lligne->color);
+        free(lligne->code);
+        free(lligne);
+    }
 
     else {
         Une_ligne * temp = lligne; 
         lligne = lligne->suiv; 
+        free(temp->code);
+        free(temp->color);
         free(temp); 
         detruire_lignes(lligne);
     }

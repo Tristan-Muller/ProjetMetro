@@ -163,5 +163,6 @@ int main(){
     lligne = chercher_ligne(lligne, "A"); 
     afficher_lignes(lligne);
     detruire_lignes(lligne);
+    printf("Memory Freed\n");
     return 0;
 }
