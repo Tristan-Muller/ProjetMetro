@@ -1,4 +1,3 @@
-
 #ifndef AQRTOPO_H
 #define AQRTOPO_H
 #include "truc.h"

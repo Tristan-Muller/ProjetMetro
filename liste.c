@@ -104,7 +104,8 @@ Un_elem* lire_stations(char *nom_fichier){
 
 	Un_elem* deb = NULL;
 	Un_elem* tete = NULL;
-
+	
+	char* nom;
 	char new[50];
 
 	while(fgets(new,50,flux)!=NULL){
@@ -113,7 +114,7 @@ Un_elem* lire_stations(char *nom_fichier){
 		Une_coord coord;
 		Tdata data;
 		float lon, lat;
-		char* nom = (char*)malloc(50*sizeof(char));
+		nom = (char*)malloc(50*sizeof(char));
 		int i=0;
 		int j=0;
 		int compt=0;
@@ -215,6 +216,7 @@ void *lire_connexions(char *nom_fichier){
 			if(compt==2){
 				stat_arr[z]=new[i];
 				z++;
+
 			}
 
 			if(compt==3){
