@@ -92,7 +92,7 @@ void detruire_liste(Un_elem* liste){
 }
 
 
-//A terminer !
+
 Un_elem* lire_stations(char *nom_fichier){
 
 	FILE* flux = NULL;
@@ -104,8 +104,7 @@ Un_elem* lire_stations(char *nom_fichier){
 
 	Un_elem* deb = NULL;
 	Un_elem* tete = NULL;
-	
-	char* nom;
+
 	char new[50];
 
 	while(fgets(new,50,flux)!=NULL){
@@ -114,7 +113,7 @@ Un_elem* lire_stations(char *nom_fichier){
 		Une_coord coord;
 		Tdata data;
 		float lon, lat;
-		nom = (char*)malloc(50*sizeof(char));
+		char* nom = (char*)malloc(50*sizeof(char));
 		int i=0;
 		int j=0;
 		int compt=0;
@@ -133,16 +132,16 @@ Un_elem* lire_stations(char *nom_fichier){
 			j++;
 			i++;
 		}
+		nom[j]='\0';
 
 		sscanf(new,"%f;%f",&lon,&lat);
-		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", lon,lat,nom);
 		
 		coord.lon = lon;
 		coord.lat = lat;
 		data.sta.nom = nom;
 		Un_truc* truc = creer_truc(coord, STA, data, 0.0); //User_val = 0 ?? 
 		liste->truc = truc;
-		free(nom);
+		
 
 		if(deb==NULL){
 			deb=liste;
@@ -151,13 +150,20 @@ Un_elem* lire_stations(char *nom_fichier){
 			tete->suiv=liste;
 			tete=liste;
 		}
+
+		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
+
+		i=0;
+		j=0;
+		compt=0;
+		free(nom);
 	}
 
 	fclose(flux);
 	return deb;
 }
 
-
+//A changer
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 	if((liste->truc->coord.lon<limite_no->lon)||(liste->truc->coord.lon>limite_se->lon)||(liste->truc->coord.lat<limite_se->lat)||(liste->truc->coord.lat>limite_no->lat)){
 		printf("La station ou la connexion sort de la delimitation, impossible de créer cette station ou connexion");
@@ -172,7 +178,7 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-void *lire_connexions(char *nom_fichier){
+Un_elem lire_connexions(char* nom_fichier, Une_ligne* liste_ligne, Un_nabr* abr_sta){
 	
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
@@ -227,13 +233,17 @@ void *lire_connexions(char *nom_fichier){
 			i++;
 		}
 
-		//sscanf(";;;%f\n", &temp);
+		stat_dep[y]='\0';
+		stat_arr[z]='\0';
+		temp[w]='\0';
+
 		printf("Ligne=%c : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
-		
-		free(stat_dep);	//Problème lors du free pour quelques gares rajoute 'ité' à la fin
+
+		free(stat_dep);	
 		free(stat_arr);
 		free(temp);
 	}
+	
 	fclose(flux);
 }
 
@@ -245,7 +255,7 @@ int main(){
 
 	printf("\nFIN STATION\n\n");
 
-	lire_connexions("connexion.csv");
+	//lire_connexions("connexion.csv");
 
 	printf("\nFIN CONNEXION\n\n");
 	return 0;
