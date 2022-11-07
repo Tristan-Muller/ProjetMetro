@@ -1,9 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "coord.h"
 #include "station.h"
 #include "truc.h"
 #include "liste.h"
+#include "ligne.h"
+#include "abr_type.h"
 #include "truc.c"
 
 /*Exercice 1 */
@@ -11,7 +14,6 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
 void detruire_liste_et_truc(Un_elem *liste);
-Un_elem *lire_stations(char *station);
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
 /*Exercice 4*/
@@ -26,7 +28,7 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 	//Si problème d'allocation 
 	if(tmp==NULL){
-		printf("erreur d'allocation de tmp");
+		printf("Erreur d'allocation de tmp");
 	}
 
 	//Cas si la liste est NULL
@@ -90,41 +92,70 @@ void detruire_liste(Un_elem* liste){
 }
 
 
+//A terminer !
+Un_elem* lire_stations(char *nom_fichier){
 
-Un_elem *lire_stations(char *station){
-	Un_elem* new_stat = (Un_elem*)malloc(sizeof(Un_elem));
-	char new_float_lon[101];
-	char new_float_lat[101];
-	char new_char[101];
-	int k = 0;
-	int j = 0;
-
-	for (int i = 0; station[i]!='\0'; ++i){
-		if(station[i]==';'){
-			if((station[i-1]=='0')||(station[i-1]=='1')||(station[i-1]=='2')||(station[i-1]=='3')||(station[i-1]=='4')||(station[i-1]=='5')||(station[i-1]=='6')||(station[i-1]=='7')||(station[i-1]=='8')||(station[i-1]=='9')){
-				if(k==0){
-					new_stat->truc->coord.lon = strtof(new_float_lon, '\0');
-				}if(k==1){
-					new_stat->truc->coord.lat = strtof(new_float_lat, '\0');
-				}
-			}else{
-				new_stat->truc->data.sta.nom = new_char;
-			}
-			k++;
-	}if(station[i]!=';'){
-		if(k==0){
-			new_float_lon[j] = station[i];
-		}if(k==1){
-			new_float_lat[j] = station[i];
-		}
-	}if(station[i]=='\0'){
-		new_char[j] = station[i];
+	FILE* flux = NULL;
+	flux = fopen(nom_fichier,"r");
+	if(flux==NULL){
+		printf("Erreur\n");
+		return NULL;
 	}
-	j++;
-}
-return new_stat;
-}
 
+	Un_elem* deb = NULL;
+	Un_elem* tete = NULL;
+	
+	char* nom;
+	char new[50];
+
+	while(fgets(new,50,flux)!=NULL){
+
+		Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
+		Une_coord coord;
+		Tdata data;
+		float lon, lat;
+		nom = (char*)malloc(50*sizeof(char));
+		int i=0;
+		int j=0;
+		int compt=0;
+
+		//On va au 1er caractère du nom de la station (on sait qu'avant ça il y a 2 ';')
+		while(compt!=2){
+			if(new[i]==';'){
+				compt++;
+			}
+			i++;
+		}
+
+		//On ecrit dans new ce qu'il y a dans le fichier à partir de l'indice qu'on a d'avant
+		while(new[i]!='\n'){
+			nom[j]=new[i];
+			j++;
+			i++;
+		}
+
+		sscanf(new,"%f;%f",&lon,&lat);
+		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", lon,lat,nom);
+		
+		coord.lon = lon;
+		coord.lat = lat;
+		data.sta.nom = nom;
+		Un_truc* truc = creer_truc(coord, STA, data, 0.0); //User_val = 0 ?? 
+		liste->truc = truc;
+		free(nom);
+
+		if(deb==NULL){
+			deb=liste;
+			tete=liste;
+		}else{
+			tete->suiv=liste;
+			tete=liste;
+		}
+	}
+
+	fclose(flux);
+	return deb;
+}
 
 
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
@@ -141,11 +172,82 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
+void *lire_connexions(char *nom_fichier){
+	
+	FILE* flux = NULL;
+	flux = fopen(nom_fichier,"r");
+	if(flux==NULL){
+		printf("Erreur\n");
+	}
 
-/* main à compléter */
+	char new[100];
+
+	while(fgets(new,100,flux)!=NULL){
+
+		char* stat_dep = (char*)malloc(100*sizeof(char));
+		char* stat_arr = (char*)malloc(100*sizeof(char));
+		char code;
+		char* temp = (char*)malloc(100*sizeof(char));
+		char* endPtr;
+		int i=0;
+		int compt=0;
+		int x=0;
+		int y=0;
+		int z=0;
+		int w=0;
+
+		while(new[i]!='\n'){
+
+			if(new[i]==';'){
+				compt++;
+				i++;
+			}
+
+			if(compt==0){
+				code=new[i];
+				x++;
+			}
+
+			if(compt==1){
+				stat_dep[y]=new[i];
+				y++;
+			}
+
+			if(compt==2){
+				stat_arr[z]=new[i];
+				z++;
+
+			}
+
+			if(compt==3){
+				temp[w]=new[i];
+				w++;
+			}
+
+			i++;
+		}
+
+		//sscanf(";;;%f\n", &temp);
+		printf("Ligne=%c : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+		
+		free(stat_dep);	//Problème lors du free pour quelques gares rajoute 'ité' à la fin
+		free(stat_arr);
+		free(temp);
+	}
+	fclose(flux);
+}
+
+
+
+
 int main(){
-	Un_elem* station = lire_stations("-1.711154;48.121348;J.F Kennedy");	//A tester !
-	free(station);
+	lire_stations("flux.csv");	//A tester !
+
+	printf("\nFIN STATION\n\n");
+
+	lire_connexions("connexion.csv");
+
+	printf("\nFIN CONNEXION\n\n");
 	return 0;
 }
 

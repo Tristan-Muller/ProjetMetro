@@ -6,6 +6,7 @@
 #include "truc.h"
 #include "liste.h"
 #include "truc.c"
+#include "ligne.h"
 
 
 //lligne : liste de lignes

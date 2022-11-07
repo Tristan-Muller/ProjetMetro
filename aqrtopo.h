@@ -1,6 +1,7 @@
-#ifndef AQR_TYPE_H
-#define AQR_TYPE_H
-
+#ifndef AQRTOPO_H
+#define AQRTOPO_H
+#include "truc.h"
+#include "coord.h"
 
 typedef struct _un_noeud {
 	Un_truc *truc; 			//Une station ou une connexion
@@ -14,4 +15,5 @@ typedef struct _un_noeud {
 
 
 #endif
+
 //Arbre Quaternaire de recherche 
