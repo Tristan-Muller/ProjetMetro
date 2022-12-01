@@ -12,10 +12,14 @@ void detruire_truc(Un_truc *truc);
 
 Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 	Un_truc* new = (Un_truc*)malloc(sizeof(Un_truc));
-	
-	//Cas où problème d'allocation
 	if(new==NULL){
-		printf("Erreur d'allocation");
+		printf("Erreur d'allocation\n");
+		return NULL;
+	}
+
+	new->data.sta.nom = (char*)malloc(50*sizeof(char));
+	if(new->data.sta.nom==NULL){
+		printf("Erreur d'allocation du nom de la station\n");
 		return NULL;
 	}
 
@@ -30,19 +34,16 @@ Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 
 void detruire_truc(Un_truc *truc){
 	if(truc->type == STA){
-
 		free(truc->data.sta.nom);
-
-		printf("toto\n");
-
+		
 		int i = 0;
-
 		while((truc->data.sta.tab_con[i])!=NULL){
 			free(truc->data.sta.tab_con[i]);
 			i++;
 		}
 
 		free(truc->data.sta.tab_con);
+		free(truc->data.sta.con_pcc);
 		free(truc);
 
 	}
@@ -53,8 +54,8 @@ void detruire_truc(Un_truc *truc){
 }
 
 
-/* Main test fonction 
-int main(){
+//Main test fonction
+/*int main(){
 
 	Une_coord coordonnee;
 	coordonnee.lon = 24.312;

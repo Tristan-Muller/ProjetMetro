@@ -23,12 +23,14 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 	Un_elem *tmp = (Un_elem*)malloc(sizeof(Un_elem));
+
 	tmp->truc=truc;
 	tmp->suiv=NULL;
 
 	//Si problème d'allocation 
 	if(tmp==NULL){
-		printf("Erreur d'allocation de tmp");
+		printf("Erreur d'allocation de tmp\n");
+		return NULL;
 	}
 
 	//Cas si la liste est NULL
@@ -45,16 +47,29 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 		return tmp;
 	}
 
-	//Cas général
-	while(((element->truc->user_val)<(tmp->truc->user_val))&&(element!=NULL)){
-		precedent = precedent->suiv;
-		element = element->suiv;
-	}
-
 	//Cas où la liste ne contient qu'un seul terme
 	if(element==NULL){
-		precedent->suiv = tmp;
-		return precedent; 
+			if((precedent->truc->user_val)>(tmp->truc->user_val)){
+				tmp->suiv = precedent;
+				return tmp ;
+			}else{
+				precedent->suiv = tmp;
+				return precedent;
+			}
+	}
+
+
+	//Cas général
+	while((element!=NULL)){
+
+		if((element->truc->user_val)>(tmp->truc->user_val)){
+			tmp->suiv = element;
+			precedent->suiv = tmp;
+			return liste;
+		}
+
+		element = element->suiv;
+		precedent = precedent->suiv;
 	}
 
 	precedent->suiv = tmp;
@@ -64,20 +79,17 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 
 
-void ecrire_liste(FILE *flux, Un_elem *liste){
+void ecrire_liste(FILE *liste_station, Un_elem *liste){
 	Un_elem* tete = liste;
-	flux = fopen("flux","w");
-	if(flux==NULL){
-		printf("Le document n'existe pas");
+	if(liste==NULL){
+		printf("Aucune liste");
 		return;
 	}
 
 	while(tete!=NULL){
-		fprintf(flux,"%f;%f;%s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom); //A verif, Je ne sais pas quoi mettre dedans car ils disent d'écrire mais d'afficher alors...
+		fprintf(liste_station,"%f;%f;%s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
 		tete = tete->suiv;
 	}
-
-	fclose(flux);
 }
 
 
@@ -92,7 +104,6 @@ void detruire_liste(Un_elem* liste){
 }
 
 
-
 Un_elem* lire_stations(char *nom_fichier){
 
 	FILE* flux = NULL;
@@ -102,14 +113,12 @@ Un_elem* lire_stations(char *nom_fichier){
 		return NULL;
 	}
 
-	Un_elem* deb = NULL;
-	Un_elem* tete = NULL;
+	char new[200];
 
-	char new[50];
+	Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
 
-	while(fgets(new,50,flux)!=NULL){
+	while(fgets(new,200,flux)!=NULL){
 
-		Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
 		Une_coord coord;
 		Tdata data;
 		float lon, lat;
@@ -138,18 +147,10 @@ Un_elem* lire_stations(char *nom_fichier){
 		
 		coord.lon = lon;
 		coord.lat = lat;
-		data.sta.nom = nom;
-		Un_truc* truc = creer_truc(coord, STA, data, 0.0); //User_val = 0 ?? 
-		liste->truc = truc;
-		
+		Un_truc* truc = creer_truc(coord, STA, data, coord.lat); 
+		strcpy(data.sta.nom, nom);
+		liste = inserer_liste_trie(liste, truc);
 
-		if(deb==NULL){
-			deb=liste;
-			tete=liste;
-		}else{
-			tete->suiv=liste;
-			tete=liste;
-		}
 
 		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
 
@@ -165,6 +166,8 @@ Un_elem* lire_stations(char *nom_fichier){
 
 //A changer
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
+
+
 	if((liste->truc->coord.lon<limite_no->lon)||(liste->truc->coord.lon>limite_se->lon)||(liste->truc->coord.lat<limite_se->lat)||(liste->truc->coord.lat>limite_no->lat)){
 		printf("La station ou la connexion sort de la delimitation, impossible de créer cette station ou connexion");
 	}
@@ -178,7 +181,7 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-Un_elem lire_connexions(char* nom_fichier, Une_ligne* liste_ligne, Un_nabr* abr_sta){
+Un_elem lire_connexions(char* nom_fichier){
 	
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
@@ -248,16 +251,34 @@ Un_elem lire_connexions(char* nom_fichier, Une_ligne* liste_ligne, Un_nabr* abr_
 }
 
 
-
+//Fonction supplementaire pour vérification
+void affiche_station(Un_elem* liste){
+	Un_elem* tmp = NULL;
+	if(liste==NULL){
+		printf("Liste vide");
+	}else{
+		tmp = liste;
+		while(tmp != NULL){
+			printf("%s\n", tmp->truc->data.sta.nom);
+			tmp = tmp->suiv;
+		}
+	}
+}
 
 int main(){
-	lire_stations("flux.csv");	//A tester !
+
+	
+	Un_elem* new = lire_stations("flux.csv");
+	affiche_station(new);
+	/*FILE* fic = fopen("liste_station.csv","w");
+	ecrire_liste(fic,new);
+	fclose(fic);
 
 	printf("\nFIN STATION\n\n");
 
-	//lire_connexions("connexion.csv");
+	lire_connexions("connexion.csv");
 
-	printf("\nFIN CONNEXION\n\n");
+	printf("\nFIN CONNEXION\n\n");*/
 	return 0;
 }
 
