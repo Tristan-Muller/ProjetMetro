@@ -70,7 +70,7 @@ Une_ligne *lire_lignes(char *nom_fichier){
     float v_moy = 0; 
     float interval = 0;
     char color_fic[15] = {0};
-    int ok =  fscanf(fic, "%[^;] ; %f ; %f ; %[^;]", code_fic, &v_moy, &interval, color_fic);
+    int ok =  fscanf(fic, "%s ; %f ; %f ; %s", code_fic, &v_moy, &interval, color_fic);
 
     Une_ligne * lligne = NULL; 
 
