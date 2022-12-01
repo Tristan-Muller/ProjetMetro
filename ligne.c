@@ -37,7 +37,6 @@ Une_ligne * ajout_ligne(Une_ligne *lligne, char *code_fic, float v_moy, float in
         return NULL;
     } 
 
-    
     new->code = (char *) malloc(strlen(code_fic)*sizeof(char));
     new->color = (char *) malloc(strlen(color_fic)*sizeof(char));
 
