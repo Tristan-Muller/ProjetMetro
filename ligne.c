@@ -124,3 +124,18 @@ Une_ligne *chercher_ligne(Une_ligne *lligne, char *code){
 
     return NULL;
 } 
+
+
+
+
+/* test de debug :
+
+int main(){
+    Une_ligne * lligne = lire_lignes("ligne.csv");
+    lligne = chercher_ligne(lligne, "A"); 
+    afficher_lignes(lligne);
+    detruire_lignes(lligne);
+    printf("Memory Freed\n");
+    return 0;
+}
+*/
