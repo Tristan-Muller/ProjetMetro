@@ -31,7 +31,7 @@ void afficher_liste(Un_elem *liste){
 	/*Fonction permettant d'afficher une liste de trucs*/
 	if (!liste) printf("### End of the List ###\n"); 
 	else {
-		if (liste->truc.type == STA)
+		if (liste->truc->type == STA)
 			printf("STA : \tLon= %f ;\t Lat = %f ;\t Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
 		else 
 			printf("CON : \tstation de départ : %s\n", liste->truc->data.con->sta_dep->data.sta.nom);
@@ -114,17 +114,28 @@ void ecrire_liste(FILE *liste_station, Un_elem *liste){
 
 
 void detruire_liste(Un_elem* liste){
-	if(liste->suiv==NULL){
+	/*Fonction qui détruit une liste de trucs*/
+
+	if (!liste)							//Si la liste est vide, RAS
+		return
+
+	if(liste->suiv==NULL){				//Si liste est un élément unique, on détruit le truc et on free la liste
 		detruire_truc(liste->truc);
+		free(liste);
 		return;
 	}
-	detruire_truc(liste->truc);
-	detruire_liste(liste->suiv);
+
+	detruire_truc(liste->truc);			//Sinon, on détruit le truc
+
+	tmp = liste->suiv;					//Puis on garde l'élément suivant avant de free l'élément courant
+	free (liste)
+	detruire_liste(tmp);				//Puis on itère sur ce nouvel élément
 }
 
 
 
 Un_elem* lire_stations(char *nom_fichier){
+	/*Fonction créant une liste de stations à partir d'un fichier .csv*/
 
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
@@ -307,8 +318,12 @@ Un_elem lire_connexions_Mairl1(char* nom_fichier){
 
 	int ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic);
 
+	Un_elem *liste =NULL;
+	Un_truc tmp = NULL;
+
 	while ( ok != EOF){
-        lligne = ajout_ligne(lligne, code_fic, v_moy, interval, color_fic);
+
+        lligne = inserer_deb_liste();
         ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic
     }
 	
