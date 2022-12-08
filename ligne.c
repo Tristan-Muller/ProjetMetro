@@ -63,7 +63,10 @@ Une_ligne *lire_lignes(char *nom_fichier){
 
     FILE* fic = NULL; 
     fic = fopen(nom_fichier, "r");
-    if (!fic) return NULL; 
+    if (!fic) {
+        printf("ERREUR\n");
+        return NULL; 
+    }
 
     char code_fic[10] = {0};
     float v_moy = 0; 

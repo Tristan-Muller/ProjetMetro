@@ -11,6 +11,8 @@ void detruire_truc(Un_truc *truc);
 
 
 Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
+	/*Fonction qui crée un truc, station ou connexion*/
+	
 	Un_truc* new = (Un_truc*)malloc(sizeof(Un_truc));
 	if(new==NULL){
 		printf("Erreur d'allocation\n");
@@ -32,7 +34,12 @@ Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 }
 
 
+
 void detruire_truc(Un_truc *truc){
+	/*Fonction qui détruit un truc, en désallouant sa mémoire*/
+
+	if (!truc) return 
+
 	if(truc->type == STA){
 		free(truc->data.sta.nom);
 		

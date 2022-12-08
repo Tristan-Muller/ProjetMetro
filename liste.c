@@ -9,32 +9,55 @@
 #include "abr_type.h"
 #include "truc.c"
 
+
+
 /*Exercice 1 */
+
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
 void detruire_liste_et_truc(Un_elem *liste);
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
+
+
 /*Exercice 4*/
+
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
 
 
 
+void afficher_liste(Un_elem *liste){
+	/*Fonction permettant d'afficher une liste de trucs*/
+	if (!liste) printf("### End of the List ###\n"); 
+	else {
+		if (liste->truc.type == STA)
+			printf("STA : \tLon= %f ;\t Lat = %f ;\t Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
+		else 
+			printf("CON : \tstation de départ : %s\n", liste->truc->data.con->sta_dep->data.sta.nom);
+		
+		if (liste->suiv)
+			afficher_liste(liste->suiv);
+	}
+}
+
+
+
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
+	/*Fonction qui ajoute un truc dans une liste triée de truc*/
+
 	Un_elem *tmp = (Un_elem*)malloc(sizeof(Un_elem));
+	if (!tmp) {					//Si problème d'allocation 
+		printf("ERREUR\n");
+		return liste;
+	}
 
 	tmp->truc=truc;
 	tmp->suiv=NULL;
 
-	//Si problème d'allocation 
-	if(tmp==NULL){
-		printf("Erreur d'allocation de tmp\n");
-		return NULL;
-	}
 
 	//Cas si la liste est NULL
-	if(liste==NULL){
+	if(!liste){
 		return tmp;
 	}
 
@@ -48,14 +71,9 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 	}
 
 	//Cas où la liste ne contient qu'un seul terme
-	if(element==NULL){
-			if((precedent->truc->user_val)>(tmp->truc->user_val)){
-				tmp->suiv = precedent;
-				return tmp ;
-			}else{
-				precedent->suiv = tmp;
-				return precedent;
-			}
+	if(element==NULL){	
+		liste->suiv = tmp;
+		return liste;  			//Ici on sait que la valeur de liste est unique et inférieure à celle de l'élément à insérer, on le place donc directement à la fin
 	}
 
 
@@ -73,7 +91,8 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 	}
 
 	precedent->suiv = tmp;
-	tmp->suiv = element;
+	tmp->suiv = NULL;
+
 	return liste;
 }
 
@@ -102,6 +121,7 @@ void detruire_liste(Un_elem* liste){
 	detruire_truc(liste->truc);
 	detruire_liste(liste->suiv);
 }
+
 
 
 Un_elem* lire_stations(char *nom_fichier){
@@ -164,6 +184,8 @@ Un_elem* lire_stations(char *nom_fichier){
 	return deb;
 }
 
+
+
 //A changer
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 
@@ -176,25 +198,39 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 
 /* Exercice 4 : CONNEXION */
 
-
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
+	/*Fonction qii insère un truc en tête d'une liste de trucs*/
+
+	if(!truc) return liste;
+
 	Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
+	if(!deb) {
+		printf("ERREUR\n");
+		return liste; 
+	}
+
 	deb->truc = truc;
-	deb->suiv = liste;
+
+	if (!liste) deb->suiv = NULL;
+	else deb->suiv = liste;
 	return deb;
 }
 
+
+
 Un_elem lire_connexions(char* nom_fichier){
+	/*Fonction permettant d'obternir une liste de connexion à partir d'un fichier*/
 	
-	FILE* flux = NULL;
-	flux = fopen(nom_fichier,"r");
-	if(flux==NULL){
+	FILE* fic = NULL;
+	fic = fopen(nom_fichier,"r");
+	if(!fic){
 		printf("Erreur\n");
+		return NULL;
 	}
 
 	char new[100];
 
-	while(fgets(new,100,flux)!=NULL){
+	while(fgets(new,100,fic)!=NULL){
 
 		char* stat_dep = (char*)malloc(100*sizeof(char));
 		char* stat_arr = (char*)malloc(100*sizeof(char));
@@ -254,6 +290,33 @@ Un_elem lire_connexions(char* nom_fichier){
 }
 
 
+Un_elem lire_connexions_Mairl1(char* nom_fichier){
+	/*Fonction permettant d'obternir une liste de connexion à partir d'un fichier*/
+	
+	FILE* fic = NULL;
+	fic = fopen(nom_fichier,"r");
+	if(!fic){
+		printf("Erreur\n");
+		return NULL;
+	}
+
+	char code_fic[10] = {0};
+	char sta_dep_fic[20] = {0}; 
+	char sta_arr_fic[20] = {0}; 
+	float temps_fic = 0;
+
+	int ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic);
+
+	while ( ok != EOF){
+        lligne = ajout_ligne(lligne, code_fic, v_moy, interval, color_fic);
+        ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic
+    }
+	
+	fclose(fic);
+}
+
+
+
 //Fonction supplementaire pour vérification
 void affiche_station(Un_elem* liste){
 	Un_elem* tmp = NULL;
@@ -267,6 +330,8 @@ void affiche_station(Un_elem* liste){
 		}
 	}
 }
+
+
 
 int main(){
 
