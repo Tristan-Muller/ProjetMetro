@@ -172,7 +172,11 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 	}
 }
 
+
+
 /* Exercice 4 : CONNEXION */
+
+
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
 	deb->truc = truc;
