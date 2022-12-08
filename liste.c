@@ -167,7 +167,6 @@ Un_elem* lire_stations(char *nom_fichier){
 //A changer
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 
-
 	if((liste->truc->coord.lon<limite_no->lon)||(liste->truc->coord.lon>limite_se->lon)||(liste->truc->coord.lat<limite_se->lat)||(liste->truc->coord.lat>limite_no->lat)){
 		printf("La station ou la connexion sort de la delimitation, impossible de créer cette station ou connexion");
 	}
