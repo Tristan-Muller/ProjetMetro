@@ -208,7 +208,7 @@ Un_elem *lire_stations(char *nom_du_fichier){
             truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
 
             liste = inserer_liste_trie(liste, truc);
-			printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
+			//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
 
             compt = 0;
         }
@@ -327,7 +327,7 @@ int main(){
 
 	Un_elem* new = lire_stations("flux.csv");
 	affiche_station(new);
-	/*FILE* fic = fopen("liste_station.csv","w");
+	FILE* fic = fopen("liste_station.csv","w");
 	ecrire_liste(fic,new);
 	fclose(fic);
 
@@ -335,7 +335,7 @@ int main(){
 
 	lire_connexions("connexion.csv");
 
-	printf("\nFIN CONNEXION\n\n");*/
+	printf("\nFIN CONNEXION\n\n");
 	return 0;
 }
 
