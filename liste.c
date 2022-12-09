@@ -19,17 +19,28 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 /*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
 
-
-
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
+
+	if(truc->type != 0){
+		printf("Le truc n'est pas une station");
+		return NULL;
+	}
+
+	if(truc==NULL){
+		printf("Le truc à inserer n'existe pas");
+		return NULL;
+	}
+
 	Un_elem *tmp = (Un_elem*)malloc(sizeof(Un_elem));
 
 	tmp->truc=truc;
 	tmp->suiv=NULL;
 
-	//Si problème d'allocation 
+	//printf("%f", tmp->truc->user_val);
+
+	//Si problème d'allocation
 	if(tmp==NULL){
-		printf("Erreur d'allocation de tmp\n");
+		printf("Erreur d'allocation de l'element\n");
 		return NULL;
 	}
 
@@ -38,42 +49,29 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 		return tmp;
 	}
 
-	Un_elem *precedent = liste;
-	Un_elem *element = liste->suiv;
+	Un_elem *maillon = liste;
 
-	//Cas où user_val du truc à ajouter est inférieur à la 1ère valeur user_val de la liste
-	if((liste->truc->user_val)>(tmp->truc->user_val)){
-		tmp->suiv = liste;
-		return tmp;
-	}
-
+	
 	//Cas où la liste ne contient qu'un seul terme
-	if(element==NULL){
-			if((precedent->truc->user_val)>(tmp->truc->user_val)){
-				tmp->suiv = precedent;
-				return tmp ;
-			}else{
-				precedent->suiv = tmp;
-				return precedent;
-			}
+	if((maillon->truc->user_val)<(tmp->truc->user_val)){
+		tmp->suiv = maillon;
+		return tmp;
 	}
 
 
 	//Cas général
-	while((element!=NULL)){
+	while((maillon->suiv!=NULL) && ((maillon->suiv)->truc->user_val)<(tmp->truc->user_val)){
 
-		if((element->truc->user_val)>(tmp->truc->user_val)){
-			tmp->suiv = element;
-			precedent->suiv = tmp;
-			return liste;
-		}
-
-		element = element->suiv;
-		precedent = precedent->suiv;
+		maillon = maillon->suiv;
 	}
 
-	precedent->suiv = tmp;
-	tmp->suiv = element;
+	if(maillon->suiv == NULL){
+		maillon->suiv = tmp;
+		return liste;
+	}
+
+	tmp->suiv = maillon->suiv;
+	maillon->suiv = tmp;
 	return liste;
 }
 
@@ -99,23 +97,26 @@ void detruire_liste(Un_elem* liste){
 		detruire_truc(liste->truc);
 		return;
 	}
+
 	detruire_truc(liste->truc);
 	detruire_liste(liste->suiv);
 }
 
 
-Un_elem* lire_stations(char *nom_fichier){
+
+Un_elem* lire_stations_marche_pas(char *nom_fichier){
 
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
 	if(flux==NULL){
-		printf("Erreur\n");
+		printf("Erreur d'ouverture du fichier\n");
 		return NULL;
 	}
 
 	char new[200];
 
-	Un_elem* liste = (Un_elem*)malloc(sizeof(Un_elem));
+	Un_elem* liste = NULL;
+
 
 	while(fgets(new,200,flux)!=NULL){
 
@@ -124,7 +125,6 @@ Un_elem* lire_stations(char *nom_fichier){
 		float lon, lat;
 		char* nom = (char*)malloc(50*sizeof(char));
 		int i=0;
-		int j=0;
 		int compt=0;
 
 		//On va au 1er caractère du nom de la station (on sait qu'avant ça il y a 2 ';')
@@ -136,32 +136,94 @@ Un_elem* lire_stations(char *nom_fichier){
 		}
 
 		//On ecrit dans new ce qu'il y a dans le fichier à partir de l'indice qu'on a d'avant
-		while(new[i]!='\n'){
+		/*while(new[i]!='\n'){
 			nom[j]=new[i];
 			j++;
 			i++;
 		}
 		nom[j]='\0';
+		*/
 
-		sscanf(new,"%f;%f",&lon,&lat);
-		
+		strcpy(nom,new +i);
+		printf("%s",nom);
+		sscanf(new, "%f;%f", &lon,&lat);
+
 		coord.lon = lon;
 		coord.lat = lat;
-		Un_truc* truc = creer_truc(coord, STA, data, coord.lat); 
-		strcpy(data.sta.nom, nom);
+
+
+		printf("%s",nom);
+		Un_truc* truc = creer_truc(coord, STA, data, coord.lat);
+		printf("%s",nom);
+		strcpy(truc->data.sta.nom, nom);
 		liste = inserer_liste_trie(liste, truc);
 
-
-		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
+		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
 
 		i=0;
-		j=0;
 		compt=0;
 		free(nom);
 	}
 
 	fclose(flux);
-	return deb;
+	return liste;
+}
+
+Un_elem *lire_stations(char *nom_du_fichier)
+{
+    FILE *flux = fopen(nom_du_fichier, "r");
+    if (flux == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier\n");
+        return NULL;
+    }
+    else
+    {
+        Un_elem *liste = NULL;
+        char ligne[100];
+        int i = 0;
+        int virgule = 0;
+        
+        while (fgets(ligne, 100, flux) != NULL)
+        {
+            float lon, lat;
+            Une_coord coord;
+            char *nom = (char *)malloc(100 * sizeof(char));
+            sscanf(ligne, "%f ; %f ; ", &lon, &lat);
+
+            for (i = 0; i < strlen(ligne); i++)
+            {
+                if (ligne[i] == ';')
+                {
+                    virgule++;
+                }
+                if (virgule == 2)
+                {
+                    strcpy(nom, ligne + i + 2);
+                    nom[strlen(nom) - 1] = '\0';
+                    break;
+                }
+            }
+
+            Un_truc *truc = (Un_truc *)malloc(sizeof(Un_truc));
+            truc->type = STA;
+            truc->data.sta.nom = (char *)malloc(100 * sizeof(char));
+            truc->coord.lon = lon;
+            truc->coord.lat = lat;
+            strcpy(truc->data.sta.nom, nom);
+            truc->user_val = coord.lat;
+            truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
+            truc->data.sta.nb_con = 0;
+            truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
+
+            liste = inserer_liste_trie(liste, truc);
+
+            virgule = 0;
+        }
+        fclose(flux);
+
+        return liste;
+    }
 }
 
 //A changer
@@ -246,7 +308,7 @@ Un_elem lire_connexions(char* nom_fichier){
 		free(stat_arr);
 		free(temp);
 	}
-	
+
 	fclose(flux);
 }
 
@@ -259,7 +321,10 @@ void affiche_station(Un_elem* liste){
 	}else{
 		tmp = liste;
 		while(tmp != NULL){
+			printf("%f\n", tmp->truc->coord.lat);
+			printf("%f\n", tmp->truc->coord.lon);
 			printf("%s\n", tmp->truc->data.sta.nom);
+			printf("\n");
 			tmp = tmp->suiv;
 		}
 	}
@@ -267,7 +332,7 @@ void affiche_station(Un_elem* liste){
 
 int main(){
 
-	
+
 	Un_elem* new = lire_stations("flux.csv");
 	affiche_station(new);
 	/*FILE* fic = fopen("liste_station.csv","w");
