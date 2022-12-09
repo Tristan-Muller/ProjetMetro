@@ -322,9 +322,10 @@ Un_elem lire_connexions_Mairl1(char* nom_fichier){
 	Un_truc tmp = NULL;
 
 	while ( ok != EOF){
+		tmp = creer_truc(0, CON, )
 
         lligne = inserer_deb_liste();
-        ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic
+        ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic);
     }
 	
 	fclose(fic);
