@@ -11,24 +11,27 @@
 
 
 
-/*Exercice 1 */
+//Fonctions définies dans ce module : 
 
+	/*Exercice 1 */
+void afficher_liste(Un_elem *liste);
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
 void detruire_liste_et_truc(Un_elem *liste);
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
-
-
-/*Exercice 4*/
-
+	/*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
 
 
 
+//Définition des fonctions
+
+
+
 void afficher_liste(Un_elem *liste){
-	/*Fonction permettant d'afficher une liste de trucs*/
+	//Affiche une liste de trucs
 	if (!liste) printf("### End of the List ###\n"); 
 	else {
 		if (liste->truc->type == STA)
@@ -44,7 +47,7 @@ void afficher_liste(Un_elem *liste){
 
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
-	/*Fonction qui ajoute un truc dans une liste triée de truc*/
+	//Ajoute un truc dans une liste triée de truc
 
 	if(!truc){
 		printf("Le truc à inserer n'existe pas");
@@ -98,6 +101,8 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 
 void ecrire_liste(FILE *liste_station, Un_elem *liste){
+	//Ecrit une liste de stations dans un fichier
+	
 	Un_elem* tete = liste;
 	if(liste==NULL){
 		printf("Aucune liste à déchiffrer");
@@ -113,7 +118,7 @@ void ecrire_liste(FILE *liste_station, Un_elem *liste){
 
 
 void detruire_liste(Un_elem* liste){
-	/*Fonction qui détruit une liste de trucs*/
+	//Détruit une liste de trucs
 
 	if (!liste)							//Si la liste est vide, RAS
 		return;
@@ -204,6 +209,7 @@ void detruire_liste(Un_elem* liste){
 
 
 Un_elem *lire_stations(char *nom_du_fichier){
+	//Crée une liste de stations à partir d'un fichier .csv
 
     FILE *flux = fopen(nom_du_fichier, "r");
     if (flux == NULL){
@@ -267,7 +273,7 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 /* Exercice 4 : CONNEXION */
 
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
-	/*Fonction qii insère un truc en tête d'une liste de trucs*/
+	//Insère un truc en tête d'une liste de trucs
 
 	if(!truc) return liste;
 
@@ -285,9 +291,9 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 }
 
 
-/*
+
 Un_elem *lire_connexions(char* nom_fichier){
-	//Fonction permettant d'obternir une liste de connexion à partir d'un fichier
+	//Crée une liste de connexion à partir d'un fichier
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -353,12 +359,13 @@ Un_elem *lire_connexions(char* nom_fichier){
 		free(stat_arr);
 		free(temp);
 	}
+	return NULL;
 
 	fclose(fic);
 }
 
 
-Un_elem *lire_connexions_Mairl1(char* nom_fichier){
+/*Un_elem *lire_connexions_Mairl1(char* nom_fichier){
 	//Fonction permettant d'obternir une liste de connexion à partir d'un fichier
 	
 	FILE* fic = NULL;
@@ -386,12 +393,12 @@ Un_elem *lire_connexions_Mairl1(char* nom_fichier){
     }
 	
 	fclose(fic);
-}
-*/
+}*/
 
 
-//Fonction supplementaire pour vérification
 void affiche_station(Un_elem* liste){
+	//Affiche une liste de stations
+
 	Un_elem* tmp = NULL;
 	if(liste==NULL){
 		printf("Liste vide");
@@ -426,7 +433,7 @@ int main(){
 
 	printf("\nFIN STATION\n\n");
 
-	//lire_connexions("connexion.csv");
+	lire_connexions("connexion.csv");
 
 	printf("\nFIN CONNEXION\n\n");
 	return 0;

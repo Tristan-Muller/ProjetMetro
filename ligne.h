@@ -10,10 +10,3 @@ typedef struct _une_ligne {
 } Une_ligne;
 
 #endif
-
-
-
-/*Ici, suite à des soucis dans les fonctions de ligne.c, j'ai remplacé les char * par des tableaux de char 
-Si possible, j'aimerais avoir le temps de revenir dessus et resoudre le problème en gardant la notion de pouinteurs 
-D'ici la, je grade les tableaux qui permettent à la fonction de marcher 
-(Merlin)*/

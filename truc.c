@@ -58,12 +58,15 @@ void detruire_truc(Un_truc *truc){
 	else
 		free(truc);
 
-	printf("Tout a bien été désalloué !\n");
+	printf("Mem Truc Désalouée\n");
 }
 
 
 //Main test fonction
-/*int main(){
+
+/*
+
+int main(){
 
 	Une_coord coordonnee;
 	coordonnee.lon = 24.312;
@@ -105,4 +108,5 @@ void detruire_truc(Un_truc *truc){
 	printf("Fin main()\n");
 	return 0;
 }
+
 */
