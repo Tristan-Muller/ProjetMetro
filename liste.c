@@ -34,7 +34,7 @@ void afficher_liste(Un_elem *liste){
 		if (liste->truc->type == STA)
 			printf("STA : \tLon= %f ;\t Lat = %f ;\t Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
 		else 
-			printf("CON : \tstation de départ : %s\n", liste->truc->data.con->sta_dep->data.sta.nom);
+			printf("CON : \tstation de départ : %s\n", liste->truc->data.con.sta_dep->data.sta.nom);
 		
 		if (liste->suiv)
 			afficher_liste(liste->suiv);
@@ -116,9 +116,9 @@ void detruire_liste(Un_elem* liste){
 	/*Fonction qui détruit une liste de trucs*/
 
 	if (!liste)							//Si la liste est vide, RAS
-		return
+		return;
 
-	if(liste->suiv==NULL){				//Si liste est un élément unique, on détruit le truc et on free la liste
+	if (liste->suiv==NULL){				//Si liste est un élément unique, on détruit le truc et on free la liste
 		detruire_truc(liste->truc);
 		free(liste);
 		return;
@@ -126,15 +126,16 @@ void detruire_liste(Un_elem* liste){
 
 	detruire_truc(liste->truc);			//Sinon, on détruit le truc
 
-	tmp = liste->suiv;					//Puis on garde l'élément suivant avant de free l'élément courant
-	free (liste)
+	Un_elem *tmp = liste->suiv;					//Puis on garde l'élément suivant avant de free l'élément courant
+	free (liste);
 	detruire_liste(tmp);				//Puis on itère sur ce nouvel élément
 }
 
 
 
-Un_elem* lire_stations(char *nom_fichier){
-	/*Fonction créant une liste de stations à partir d'un fichier .csv*/
+
+/*Un_elem* lire_stations(char *nom_fichier){
+	//Fonction créant une liste de stations à partir d'un fichier .csv
 
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
@@ -197,8 +198,8 @@ Un_elem* lire_stations(char *nom_fichier){
 
 	fclose(flux);
 	return liste;
-}
-*/
+}*/
+
 
 
 
@@ -284,9 +285,9 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 }
 
 
-
-Un_elem lire_connexions(char* nom_fichier){
-	/*Fonction permettant d'obternir une liste de connexion à partir d'un fichier*/
+/*
+Un_elem *lire_connexions(char* nom_fichier){
+	//Fonction permettant d'obternir une liste de connexion à partir d'un fichier
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -353,12 +354,12 @@ Un_elem lire_connexions(char* nom_fichier){
 		free(temp);
 	}
 
-	fclose(flux);
+	fclose(fic);
 }
 
 
-Un_elem lire_connexions_Mairl1(char* nom_fichier){
-	/*Fonction permettant d'obternir une liste de connexion à partir d'un fichier*/
+Un_elem *lire_connexions_Mairl1(char* nom_fichier){
+	//Fonction permettant d'obternir une liste de connexion à partir d'un fichier
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -375,7 +376,7 @@ Un_elem lire_connexions_Mairl1(char* nom_fichier){
 	int ok = fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &temps_fic);
 
 	Un_elem *liste =NULL;
-	Un_truc tmp = NULL;
+	Un_truc *tmp = NULL;
 
 	while ( ok != EOF){
 		tmp = creer_truc(0, CON, )
@@ -386,7 +387,7 @@ Un_elem lire_connexions_Mairl1(char* nom_fichier){
 	
 	fclose(fic);
 }
-
+*/
 
 
 //Fonction supplementaire pour vérification
@@ -418,13 +419,13 @@ int main(){
 	ecrire_liste(fic,new);
 	fclose(fic);
 
-	detruire_liste_et_truc(new);
+	detruire_liste(new);
 	printf("Tout a bien été désalloué !");
 
 
 	printf("\nFIN STATION\n\n");
 
-	lire_connexions("connexion.csv");
+	//lire_connexions("connexion.csv");
 
 	printf("\nFIN CONNEXION\n\n");
 	return 0;

@@ -63,7 +63,7 @@ void detruire_truc(Un_truc *truc){
 
 
 //Main test fonction
-int main(){
+/*int main(){
 
 	Une_coord coordonnee;
 	coordonnee.lon = 24.312;
@@ -105,3 +105,4 @@ int main(){
 	printf("Fin main()\n");
 	return 0;
 }
+*/
