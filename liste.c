@@ -80,12 +80,12 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 void ecrire_liste(FILE *liste_station, Un_elem *liste){
 	Un_elem* tete = liste;
 	if(liste==NULL){
-		printf("Aucune liste");
+		printf("Aucune liste à déchiffrer");
 		return;
 	}
 
 	while(tete!=NULL){
-		fprintf(liste_station,"%f;%f;%s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
+		fprintf(liste_station,"%f;%f;%s\n", tete->truc->coord.lon, tete->truc->coord.lat, tete->truc->data.sta.nom);
 		tete = tete->suiv;
 	}
 }
@@ -93,17 +93,24 @@ void ecrire_liste(FILE *liste_station, Un_elem *liste){
 
 
 void detruire_liste(Un_elem* liste){
+	free(liste);
+	return;
+}
+
+
+void detruire_liste_et_truc(Un_elem* liste){
 	if(liste->suiv==NULL){
 		detruire_truc(liste->truc);
+		detruire_liste(liste);
 		return;
 	}
 
 	detruire_truc(liste->truc);
-	detruire_liste(liste->suiv);
+	detruire_liste_et_truc(liste->suiv);
 }
 
 
-
+/*
 Un_elem* lire_stations_marche_pas(char *nom_fichier){
 
 	FILE* flux = NULL;
@@ -136,13 +143,13 @@ Un_elem* lire_stations_marche_pas(char *nom_fichier){
 		}
 
 		//On ecrit dans new ce qu'il y a dans le fichier à partir de l'indice qu'on a d'avant
-		/*while(new[i]!='\n'){
+		while(new[i]!='\n'){
 			nom[j]=new[i];
 			j++;
 			i++;
 		}
 		nom[j]='\0';
-		*/
+		
 
 		strcpy(nom,new +i);
 		printf("%s",nom);
@@ -168,6 +175,9 @@ Un_elem* lire_stations_marche_pas(char *nom_fichier){
 	fclose(flux);
 	return liste;
 }
+*/
+
+
 
 Un_elem *lire_stations(char *nom_du_fichier){
 
@@ -191,7 +201,7 @@ Un_elem *lire_stations(char *nom_du_fichier){
                     compt++;
                 }if (compt == 2){
                     strcpy(nom, ligne + i + 1);
-                    nom[strlen(nom) - 1] = '\0';
+                    nom[strlen(nom)-1] = '\0';
                     break;
                 }
             }
@@ -228,6 +238,7 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 }
 
 /* Exercice 4 : CONNEXION */
+
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
 	deb->truc = truc;
@@ -313,10 +324,9 @@ void affiche_station(Un_elem* liste){
 	}else{
 		tmp = liste;
 		while(tmp != NULL){
-			printf("%f\n", tmp->truc->coord.lat);
-			printf("%f\n", tmp->truc->coord.lon);
+			//printf("%f\n", tmp->truc->coord.lat);
+			//printf("%f\n", tmp->truc->coord.lon);
 			printf("%s\n", tmp->truc->data.sta.nom);
-			printf("\n");
 			tmp = tmp->suiv;
 		}
 	}
@@ -324,12 +334,18 @@ void affiche_station(Un_elem* liste){
 
 int main(){
 
-
 	Un_elem* new = lire_stations("flux.csv");
+
+	//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
 	affiche_station(new);
+
 	FILE* fic = fopen("liste_station.csv","w");
 	ecrire_liste(fic,new);
 	fclose(fic);
+
+	detruire_liste_et_truc(new);
+	printf("Tout a bien été désalloué !");
+
 
 	printf("\nFIN STATION\n\n");
 
