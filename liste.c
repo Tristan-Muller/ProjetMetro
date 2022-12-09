@@ -169,37 +169,28 @@ Un_elem* lire_stations_marche_pas(char *nom_fichier){
 	return liste;
 }
 
-Un_elem *lire_stations(char *nom_du_fichier)
-{
+Un_elem *lire_stations(char *nom_du_fichier){
+
     FILE *flux = fopen(nom_du_fichier, "r");
-    if (flux == NULL)
-    {
+    if (flux == NULL){
         printf("Erreur lors de l'ouverture du fichier\n");
         return NULL;
-    }
-    else
-    {
+    }else{
         Un_elem *liste = NULL;
         char ligne[100];
         int i = 0;
-        int virgule = 0;
+        int compt = 0;
         
-        while (fgets(ligne, 100, flux) != NULL)
-        {
+        while (fgets(ligne, 100, flux) != NULL){
             float lon, lat;
-            Une_coord coord;
             char *nom = (char *)malloc(100 * sizeof(char));
             sscanf(ligne, "%f ; %f ; ", &lon, &lat);
 
-            for (i = 0; i < strlen(ligne); i++)
-            {
-                if (ligne[i] == ';')
-                {
-                    virgule++;
-                }
-                if (virgule == 2)
-                {
-                    strcpy(nom, ligne + i + 2);
+            for (i = 0; i < strlen(ligne); i++){
+                if (ligne[i] == ';'){
+                    compt++;
+                }if (compt == 2){
+                    strcpy(nom, ligne + i + 1);
                     nom[strlen(nom) - 1] = '\0';
                     break;
                 }
@@ -211,14 +202,15 @@ Un_elem *lire_stations(char *nom_du_fichier)
             truc->coord.lon = lon;
             truc->coord.lat = lat;
             strcpy(truc->data.sta.nom, nom);
-            truc->user_val = coord.lat;
+            truc->user_val = lat;
             truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
             truc->data.sta.nb_con = 0;
             truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
 
             liste = inserer_liste_trie(liste, truc);
+			printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
 
-            virgule = 0;
+            compt = 0;
         }
         fclose(flux);
 
