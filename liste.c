@@ -398,8 +398,8 @@ void affiche_station(Un_elem* liste){
 	}else{
 		tmp = liste;
 		while(tmp != NULL){
-			//printf("%f\n", tmp->truc->coord.lat);
-			//printf("%f\n", tmp->truc->coord.lon);
+			printf("%f\n", tmp->truc->coord.lat);
+			printf("%f\n", tmp->truc->coord.lon);
 			printf("%s\n", tmp->truc->data.sta.nom);
 			tmp = tmp->suiv;
 		}
@@ -413,7 +413,8 @@ int main(){
 	Un_elem* new = lire_stations("flux.csv");
 
 	//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
-	affiche_station(new);
+	//affiche_station(new);
+	afficher_liste(new);
 
 	FILE* fic = fopen("liste_station.csv","w");
 	ecrire_liste(fic,new);
