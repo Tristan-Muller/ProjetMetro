@@ -98,84 +98,16 @@ void detruire_liste(Un_elem* liste){
 }
 
 
+
 void detruire_liste_et_truc(Un_elem* liste){
-	if(liste->suiv==NULL){
-		detruire_truc(liste->truc);
-		detruire_liste(liste);
-		return;
+	Un_elem* tete = liste;
+	while(liste!=NULL){
+		liste = liste->suiv;
+		detruire_truc(tete->truc);
+		detruire_liste(tete);
+		tete = liste;
 	}
-
-	detruire_truc(liste->truc);
-	detruire_liste_et_truc(liste->suiv);
 }
-
-
-/*
-Un_elem* lire_stations_marche_pas(char *nom_fichier){
-
-	FILE* flux = NULL;
-	flux = fopen(nom_fichier,"r");
-	if(flux==NULL){
-		printf("Erreur d'ouverture du fichier\n");
-		return NULL;
-	}
-
-	char new[200];
-
-	Un_elem* liste = NULL;
-
-
-	while(fgets(new,200,flux)!=NULL){
-
-		Une_coord coord;
-		Tdata data;
-		float lon, lat;
-		char* nom = (char*)malloc(50*sizeof(char));
-		int i=0;
-		int compt=0;
-
-		//On va au 1er caractère du nom de la station (on sait qu'avant ça il y a 2 ';')
-		while(compt!=2){
-			if(new[i]==';'){
-				compt++;
-			}
-			i++;
-		}
-
-		//On ecrit dans new ce qu'il y a dans le fichier à partir de l'indice qu'on a d'avant
-		while(new[i]!='\n'){
-			nom[j]=new[i];
-			j++;
-			i++;
-		}
-		nom[j]='\0';
-		
-
-		strcpy(nom,new +i);
-		printf("%s",nom);
-		sscanf(new, "%f;%f", &lon,&lat);
-
-		coord.lon = lon;
-		coord.lat = lat;
-
-
-		printf("%s",nom);
-		Un_truc* truc = creer_truc(coord, STA, data, coord.lat);
-		printf("%s",nom);
-		strcpy(truc->data.sta.nom, nom);
-		liste = inserer_liste_trie(liste, truc);
-
-		printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
-
-		i=0;
-		compt=0;
-		free(nom);
-	}
-
-	fclose(flux);
-	return liste;
-}
-*/
 
 
 
@@ -212,7 +144,7 @@ Un_elem *lire_stations(char *nom_du_fichier){
             truc->coord.lon = lon;
             truc->coord.lat = lat;
             strcpy(truc->data.sta.nom, nom);
-            truc->user_val = lat;
+            truc->user_val = 0.0;
             truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
             truc->data.sta.nb_con = 0;
             truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
@@ -228,14 +160,38 @@ Un_elem *lire_stations(char *nom_du_fichier){
     }
 }
 
-//A changer
+
+
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
+	Un_elem* tete = liste;
+	limite_no->lon = liste->truc->coord.lon;
+	limite_no->lat = liste->truc->coord.lat;
+	limite_se->lon = liste->truc->coord.lon;
+	limite_se->lat = liste->truc->coord.lat;
+	tete = tete->suiv;
 
+	while(tete!=NULL){
 
-	if((liste->truc->coord.lon<limite_no->lon)||(liste->truc->coord.lon>limite_se->lon)||(liste->truc->coord.lat<limite_se->lat)||(liste->truc->coord.lat>limite_no->lat)){
-		printf("La station ou la connexion sort de la delimitation, impossible de créer cette station ou connexion");
+		if((tete->truc->coord.lon)>(limite_se->lon)){
+			limite_se->lon = tete->truc->coord.lon;
+		}
+
+		if((tete->truc->coord.lat)<(limite_se->lat)){
+			limite_se->lat = tete->truc->coord.lat;
+		}
+
+		if((tete->truc->coord.lon)<(limite_no->lon)){
+			limite_no->lon = tete->truc->coord.lon;
+		}
+
+		if((tete->truc->coord.lat)>(limite_no->lat)){
+			limite_no->lat = tete->truc->coord.lat;
+		}
+
+		tete = tete->suiv;
 	}
 }
+
 
 /* Exercice 4 : CONNEXION */
 
@@ -334,6 +290,8 @@ void affiche_station(Un_elem* liste){
 
 int main(){
 
+	printf("\n---DEBUT STATION---\n\n");
+
 	Un_elem* new = lire_stations("flux.csv");
 
 	//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
@@ -343,15 +301,34 @@ int main(){
 	ecrire_liste(fic,new);
 	fclose(fic);
 
+	Une_coord limite_no;
+	Une_coord limite_se;
+
+	limites_zone(new, &limite_no, &limite_se);
+
+	printf("\n---LIMITES ZONES---\n\n");
+	printf("Longitude min : %f\n", limite_no.lon);
+	printf("Latitude max : %f\n", limite_no.lat);
+	printf("Longitude max : %f\n", limite_se.lon);
+	printf("Latitude min : %f\n", limite_se.lat);
+
+	//Revoir detruire ! (Je comprend pas pk ça marche pas)
 	detruire_liste_et_truc(new);
+
+	//affiche_station(new); //Normallement affiche ("Liste vide")
+
+	//N'affiche pas, donc tout n'a pas bien été desalloué
+	if(new==NULL){
 	printf("Tout a bien été désalloué !");
+	}
 
 
-	printf("\nFIN STATION\n\n");
+	printf("\n---FIN STATION---\n");
+	printf("\n---DEBUT CONNEXION---\n\n");
 
 	lire_connexions("connexion.csv");
 
-	printf("\nFIN CONNEXION\n\n");
+	printf("\n---FIN CONNEXION---\n\n");
 	return 0;
 }
 
