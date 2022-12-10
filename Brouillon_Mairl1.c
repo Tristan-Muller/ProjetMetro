@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ligne.h"
-#include "ligne.c"
+#include "truc.h"
+#include "truc.c"
+#include "liste.h"
+#include "connexion.h"
+
 
 
 
@@ -158,11 +161,41 @@ typedef struct _un_noeud {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+void lire_connexion(char *nom_fichier){
+    //Parcours le fichier .csv fournis en argument et construit la liste de Une_ligne correspondante
+
+    int i = 0;
+
+    FILE* fic = NULL; 
+    fic = fopen(nom_fichier, "r");                                      //Ouverture du fichier en mode lecture
+    if (!fic) {
+        printf("ERREUR\n");
+        return ; 
+    }
+
+    char code_fic[10] = {0};                                            //On crée les variables qui vont récupérer les données du fichier
+    char sta_dep_fic[10] = {0};  
+    char sta_arr_fic[10] = {0};  
+    float interval_fic = 0; 
+    int ok =  fscanf(fic, "%s;%s;%s;%f", code_fic, sta_dep_fic, sta_arr_fic, &interval_fic);     //Première lecture du chier 
+
+    while ( (ok != EOF ) && (i!=5)){
+        printf("Code : %s \nDep : %s\tArr : %s\nInt : %f\n", code_fic, sta_dep_fic, sta_arr_fic, interval_fic);
+        ok =  fscanf(fic, "%s ; %s ; %s ; %f", code_fic, sta_dep_fic, sta_arr_fic, &interval_fic);
+        i++;
+    }
+
+    fclose(fic);
+}
+
+
 int main(){
-    Une_ligne * lligne = lire_lignes("ligne.csv");
-    lligne = chercher_ligne(lligne, "A"); 
-    afficher_lignes(lligne);
-    detruire_lignes(lligne);
-    printf("Memory Freed\n");
+
+    lire_connexion("connexion.csv");
+
     return 0;
 }

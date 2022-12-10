@@ -139,7 +139,7 @@ void detruire_liste(Un_elem* liste){
 
 
 
-/*Un_elem* lire_stations(char *nom_fichier){
+/*Un_elem* lire_stations(char *nom_fichier){ 	//Version 1 (ne fonctionne pas)
 	//Fonction créant une liste de stations à partir d'un fichier .csv
 
 	FILE* flux = NULL;
@@ -227,9 +227,9 @@ Un_elem *lire_stations(char *nom_du_fichier){
             sscanf(ligne, "%f ; %f ; ", &lon, &lat);
 
             for (i = 0; i < strlen(ligne); i++){
-                if (ligne[i] == ';'){
+                if (ligne[i] == ';')
                     compt++;
-                }if (compt == 2){
+                if (compt == 2){
                     strcpy(nom, ligne + i + 1);
                     nom[strlen(nom)-1] = '\0';
                     break;

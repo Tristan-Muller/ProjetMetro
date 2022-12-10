@@ -11,4 +11,6 @@ int main(int argc, char **argv){
     return 0;
 }
 
+
+//Compilation : 
 //  gcc src/main.c -o bin/prog -I include -L lib -lSDL2main -lSDL2

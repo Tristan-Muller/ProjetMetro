@@ -11,7 +11,12 @@ Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_c
 
 
 Un_noeud *creer_noeud(Un_truc *truc) {
-    /*Fonction de création d'un noeud d'AQR*/
+    //Crée d'un noeud d'AQR
+
+    if (!truc) {
+        printf("Truc = NULL\n");
+        return NULL;
+    }
 
     Un_noeud noeud = (Un_noeud *) malloc(sizeof(Un_noeud *));
     if(!noeud){
@@ -33,11 +38,12 @@ Un_noeud *creer_noeud(Un_truc *truc) {
 
 
 Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, Un_truc *truc){
-    /*Fonction d'insertion d'un truc dans l'AQR*/
+    //Insert un truc dans l'AQR
 
-    Un_noeud * new = creer_noeud(truc);
-    if (!new) return aqr;
-    if (!aqr) return new;  
+    Un_noeud * new = creer_noeud(truc);     //On crée un nouvreau noeud à partir du truc
+    if (!new) return aqr;                   //Cas où new est NULL
+
+    if (!aqr) return new;                   //Cas où aqr est NULL
 
     
 
