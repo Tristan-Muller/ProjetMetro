@@ -102,7 +102,7 @@ void detruire_aqr(Un_noeud *aqr){
         if (aqr->so)
             detruire_aqr(aqr->so); 
         if (aqr->se)
-            detruire_aqr(aqr->so);
+            detruire_aqr(aqr->se);
     }
 
     free(aqr);
@@ -114,12 +114,21 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
 
     if((!aqr) || (!coord)) return NULL;
 
-    if(aqr->truc->coord == coord)               //Cas où aqr est l'élément cherché
+    if(aqr->truc->coord == coord){               //Cas où aqr est l'élément cherché
+        printf("AQR : found\n");
         return aqr->truc;
+    }
 
     if (aqr->truc->coord.lon > coord.lon){
-        if(aqr->truc->coord.lat > coord.lat){
+        if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->ne, coord); 
-        }
+        else 
+            return chercher_aqr(aqr->se, coord); 
+    }
+    else {
+        if(aqr->truc->coord.lat > coord.lat)
+            return chercher_aqr(aqr->no, coord); 
+        else 
+            return chercher_aqr(aqr->so, coord); 
     }
 }
