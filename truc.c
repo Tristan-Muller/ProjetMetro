@@ -5,10 +5,15 @@
 #include "station.h"
 #include "truc.h"
 
+
+//Fonctions définies dans ce module
+
 Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv);
 void detruire_truc(Un_truc *truc);
 
 
+
+//Définition des fonctions
 
 Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv){
 	/*Fonction qui crée un truc, station ou connexion*/
