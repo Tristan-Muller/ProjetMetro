@@ -154,15 +154,15 @@ Un_elem *lire_stations(char *nom_du_fichier){
 	char ligne[100];
 	int i = 0;
 	int compt = 0;
-	
-	while (fgets(ligne, 100, flux)){
-		float lon, lat;
-		char *nom = (char *)malloc(100 * sizeof(char));
-		if (!nom) {
-			printf("Erreur\n");
-			return NULL;
-		}
 
+	float lon, lat;
+	char *nom = (char *)malloc(100 * sizeof(char));
+	if (!nom) {											//Vérification de l'allocation mémoire
+		printf("Erreur\n");
+		return NULL;
+	}
+	
+	while (fgets(ligne, 100, flux)){					//On boucle sur tout le fichier
 		sscanf(ligne, "%f ; %f ; ", &lon, &lat);
 
 		for (i = 0; i < strlen(ligne); i++){

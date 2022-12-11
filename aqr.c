@@ -115,7 +115,7 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     if((!aqr) || (!coord)) return NULL;
 
     if(aqr->truc->coord == coord){               //Cas où aqr est l'élément cherché
-        printf("AQR : found\n");
+        printf("in AQR : found\n");
         return aqr->truc;
     }
 
@@ -147,7 +147,7 @@ Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_c
     
     if ((aqr->truc->coord.lon > limite_no.lon) && (aqr->truc->coord.lat < limite_no.lat)){
         if ((aqr->truc->coord.lon < limite_se.lon) && (aqr->truc->coord.lat > limite_se.lat))
-            
+
 
     }
 
