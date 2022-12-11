@@ -122,10 +122,12 @@ void detruire_liste(Un_elem* liste){
 
 	if (!liste)							//Si la liste est vide, RAS
 		return;
-		
+
 	free(liste);
 
 }
+
+
 
 void detruire_liste_et_truc(Un_elem* liste){
 	Un_elem* tete = liste;
@@ -168,15 +170,21 @@ Un_elem *lire_stations(char *nom_du_fichier){
             }
 
             Un_truc *truc = (Un_truc *)malloc(sizeof(Un_truc));
-            truc->type = STA;
-            truc->data.sta.nom = (char *)malloc(100 * sizeof(char));
-            truc->coord.lon = lon;
-            truc->coord.lat = lat;
-            strcpy(truc->data.sta.nom, nom);
-            truc->user_val = 0.0;
-            truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
-            truc->data.sta.nb_con = 0;
-            truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
+
+			if (!truc){
+				printf("Erreur\n");
+			}
+			else {
+				truc->type = STA;
+				truc->data.sta.nom = (char *)malloc(100 * sizeof(char));
+				truc->coord.lon = lon;
+				truc->coord.lat = lat;
+				strcpy(truc->data.sta.nom, nom);
+				truc->user_val = 0.0;
+				truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
+				truc->data.sta.nb_con = 0;
+				truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
+			}
 
             liste = inserer_liste_trie(liste, truc);
 			//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);

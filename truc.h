@@ -20,7 +20,7 @@ typedef struct _un_truc {
 	Une_coord coord;
 	Ttype type;
 	Tdata data;
-	float user_val; //Distance pour plus court chemin
+	float user_val; 		//Distance pour plus court chemin
 } Un_truc;
 
 #endif

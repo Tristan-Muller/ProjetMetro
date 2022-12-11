@@ -132,3 +132,24 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
             return chercher_aqr(aqr->so, coord); 
     }
 }
+
+Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_coord limite_se){
+    //Renvoie une liste de trucs qui sont dans la zone définie par les limites _no et _se
+
+    if (!aqr)                       //Cas où l'aqr est vide 
+        return liste;               //On retourne la liste (doute là dessus)
+
+    Un_elem *elem = liste;
+
+    while (elem->suiv) {
+        elem = elem->suiv;
+    }
+    
+    if ((aqr->truc->coord.lon > limite_no.lon) && (aqr->truc->coord.lat < limite_no.lat)){
+        if ((aqr->truc->coord.lon < limite_se.lon) && (aqr->truc->coord.lat > limite_se.lat))
+            
+
+    }
+
+    return liste;
+}
