@@ -6,12 +6,26 @@
 #include "liste.h"
 
 
+//Fonctions définies dans ce module 
 
+Un_nabr *creer_nabr(Un_truc *truc);
+Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n);
+Un_nabr *construire_abr(Un_elem *liste_sta);
+void detruire_abr(Un_nabr *abr);
+Un_truc *chercher_station(Un_nabr *abr, char *nom);
+
+
+
+//Definition des fonctions
 
 Un_nabr *creer_nabr(Un_truc *truc) {
-    /*Fonction de création d'un noeud d'arbre binaire de recherche*/
+    //Crée un noeud d'abr
 
     Un_nabr* nabr = (Un_nabr * ) malloc(sizeof(Un_nabr));
+    if (!nabr){
+        printf("Erreur\n");
+        return NULL;
+    }
 
     nabr->g = NULL;
     nabr->d = NULL;
@@ -23,27 +37,29 @@ Un_nabr *creer_nabr(Un_truc *truc) {
 
 
 Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
-    /*Fonction d'insertion d'un noeud dans un ABR*/
+    //Insert d'un noeud dans un ABR
 
-    if(!n) return abr;
-    if(!abr) return n; 
+    if(!n) return abr;                  //Cas où le nouvel élément est nul 
+    if(!abr) return n;                  //Cas ou abr est nul
 
-    if(strcmp(n->truc->data.sta.nom, abr->truc->data.sta.nom))
+    if(strcmp(n->truc->data.sta.nom, abr->truc->data.sta.nom))      //La fonction revoie un entier positif si str1 est "plus grand" que str2
         abr->g = inserer_abr(abr->g, n);
     
     else 
         abr->d = inserer_abr(abr->d, n);
+
+    return abr;
 }
 
 
 
 Un_nabr *construire_abr(Un_elem *liste_sta) {
-    /*Fonction de création d'un ABR à partir d'une liste de stations*/
+    //Crée un ABR à partir d'une liste de stations
 
-    if(! liste_sta) return NULL;
+    if(! liste_sta) return NULL;                        //Cas où liste_sta est vide
 
-    Un_nabr* n = creer_nabr(liste_sta->truc); 
-    n = inserer_abr(n, construire_abr(liste_sta->suiv)); //Tu avais mis *liste_sta +1 mais ce n'est pas un nombre donc je pense que t'avais voulu dire suivant
+    Un_nabr* new = creer_nabr(liste_sta->truc); 
+    new = inserer_abr(n, construire_abr(liste_sta->suiv));
 
     return n;
 }
@@ -51,14 +67,14 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 
 
 void detruire_abr(Un_nabr *abr) {
-    /*Fonction de destruction d'un ABR*/
+    //Detruit un ABR
 
-    if (! abr) return; 
+    if (! abr) return;      //Cas où abr est vide 
 
-    if (!abr->d && !abr->g) 
+    if (!abr->d && !abr->g)         //Cas où abr est le dernier élément de la branche
         free(abr); 
     
-    else {
+    else {                          //Cas général
         if (abr->d) detruire_abr(abr->d);
         if (abr->g) detruire_abr(abr->g);
     }
@@ -69,14 +85,14 @@ void detruire_abr(Un_nabr *abr) {
 
 
 Un_truc *chercher_station(Un_nabr *abr, char *nom){
-    /*Fonction permettant de rechercher une station dans un ABR*/
+    //Recherche une station dans un ABR
 
-    if (!abr) 
+    if (!abr)                       //Cas où abr est vide
         return NULL; 
 
     int comp = strcmp(abr->truc->data.sta.nom,nom);
 
-    if(!comp)         //La fonction vaut 0 si les deux chaines sont égales
+    if(!comp)                                           //La fonction vaut 0 si les deux chaines sont égales
         return abr->truc;
     
     if (comp<0)
