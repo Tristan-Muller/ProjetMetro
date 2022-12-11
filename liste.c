@@ -148,53 +148,64 @@ Un_elem *lire_stations(char *nom_du_fichier){
     if (flux == NULL){
         printf("Erreur lors de l'ouverture du fichier\n");
         return NULL;
-    }else{
-        Un_elem *liste = NULL;
-        char ligne[100];
-        int i = 0;
-        int compt = 0;
-        
-        while (fgets(ligne, 100, flux) != NULL){
-            float lon, lat;
-            char *nom = (char *)malloc(100 * sizeof(char));
-            sscanf(ligne, "%f ; %f ; ", &lon, &lat);
-
-            for (i = 0; i < strlen(ligne); i++){
-                if (ligne[i] == ';')
-                    compt++;
-                if (compt == 2){
-                    strcpy(nom, ligne + i + 1);
-                    nom[strlen(nom)-1] = '\0';
-                    break;
-                }
-            }
-
-            Un_truc *truc = (Un_truc *)malloc(sizeof(Un_truc));
-
-			if (!truc){
-				printf("Erreur\n");
-			}
-			else {
-				truc->type = STA;
-				truc->data.sta.nom = (char *)malloc(100 * sizeof(char));
-				truc->coord.lon = lon;
-				truc->coord.lat = lat;
-				strcpy(truc->data.sta.nom, nom);
-				truc->user_val = 0.0;
-				truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
-				truc->data.sta.nb_con = 0;
-				truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
-			}
-
-            liste = inserer_liste_trie(liste, truc);
-			//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
-
-            compt = 0;
-        }
-        fclose(flux);
-
-        return liste;
     }
+
+	Un_elem *liste = NULL;
+	char ligne[100];
+	int i = 0;
+	int compt = 0;
+	
+	while (fgets(ligne, 100, flux)){
+		float lon, lat;
+		char *nom = (char *)malloc(100 * sizeof(char));
+		if (!nom) {
+			printf("Erreur\n");
+			return NULL;
+		}
+
+		sscanf(ligne, "%f ; %f ; ", &lon, &lat);
+
+		for (i = 0; i < strlen(ligne); i++){
+			if (ligne[i] == ';')
+				compt++;
+			if (compt == 2){
+				strcpy(nom, ligne + i + 1);
+				nom[strlen(nom)-1] = '\0';
+				break;
+			}
+		}
+
+		Un_truc *truc = (Un_truc *)malloc(sizeof(Un_truc));
+		if (!truc){
+			printf("Erreur\n");
+			return NULL;
+		}
+		else {
+			truc->type = STA;
+			truc->data.sta.nom = (char *)malloc(100 * sizeof(char));
+			truc->coord.lon = lon;
+			truc->coord.lat = lat;
+			strcpy(truc->data.sta.nom, nom);
+			truc->user_val = 0.0;
+			truc->data.sta.tab_con = (Un_truc **)malloc(10 * sizeof(Un_truc *));
+			truc->data.sta.nb_con = 0;
+			truc->data.sta.con_pcc = (Un_truc *)malloc(10 * sizeof(Un_truc));
+
+			if ((!truc->data.sta.con_pcc) || (!truc->data.sta.tab_con) || (!truc->data.sta.nom)){
+				printf("Erreur\n");
+				return NULL;
+			}
+		}
+
+		liste = inserer_liste_trie(liste, truc);
+		//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
+
+		compt = 0;
+	}
+	fclose(flux);
+
+	return liste;
+    
 }
 
 
