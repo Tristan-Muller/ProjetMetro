@@ -106,5 +106,20 @@ void detruire_aqr(Un_noeud *aqr){
     }
 
     free(aqr);
-    
+}
+
+
+Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
+    //Cherche un truc dont la coord se trouve dans l'aqr
+
+    if((!aqr) || (!coord)) return NULL;
+
+    if(aqr->truc->coord == coord)               //Cas où aqr est l'élément cherché
+        return aqr->truc;
+
+    if (aqr->truc->coord.lon > coord.lon){
+        if(aqr->truc->coord.lat > coord.lat){
+            return chercher_aqr(aqr->ne, coord); 
+        }
+    }
 }
