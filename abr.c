@@ -58,8 +58,8 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 
     if(! liste_sta) return NULL;                        //Cas où liste_sta est vide
 
-    Un_nabr* new = creer_nabr(liste_sta->truc); 
-    new = inserer_abr(n, construire_abr(liste_sta->suiv));
+    Un_nabr* abr = creer_nabr(liste_sta->truc); 
+    abr = inserer_abr(abr, construire_abr(liste_sta->suiv));
 
     return n;
 }
