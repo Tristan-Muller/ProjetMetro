@@ -47,15 +47,25 @@ Un_noeud *creer_noeud(Un_truc *truc) {
 }
 
 
+
 Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, Un_truc *truc){
     //Insert un truc dans l'AQR
 
-    Un_noeud * new = creer_noeud(truc);     //On crée un nouvreau noeud à partir du truc
-    if (!new) return aqr;                   //Cas où new est NULL
+    if (!truc) return aqr;                                  //Cas où new est NULL
+    if (!aqr) return creer_noeud(truc);                     //Cas où aqr est NULL
 
-    if (!aqr) return new;                   //Cas où aqr est NULL
-
-    
+    if (truc->coord.lon > aqr->truc->coord.lon){
+        if (truc->coord.lat > aqr->truc->coord.lat) 
+            aqr->ne = inserer_aqr(aqr->ne, limite_no, limite_se, truc);
+        else 
+            aqr->se = inserer_aqr(aqr->se, limite_no, limite_se, truc);
+    }
+    else {
+        if (truc->coord.lat > aqr->truc->coord.lat) 
+            aqr->no = inserer_aqr(aqr->no, limite_no, limite_se, truc);
+        else 
+            aqr->so = inserer_aqr(aqr->so, limite_no, limite_se, truc);
+    }
 
     return aqr;
 }
