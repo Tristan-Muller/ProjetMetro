@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "coord.h"
 #include "station.h"
-#include "truc.h"
 #include "liste.h"
-#include "truc.c"
 #include "ligne.h"
 
 

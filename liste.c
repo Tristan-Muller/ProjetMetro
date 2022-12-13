@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "abr_type.h"
 #include "coord.h"
-#include "station.h"
-#include "truc.h"
 #include "liste.h"
 #include "ligne.h"
-#include "abr_type.h"
+#include "station.h"
+#include "truc.h"
 #include "truc.c"
 
 

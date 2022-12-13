@@ -47,8 +47,10 @@ Un_noeud *creer_noeud(Un_truc *truc) {
     noeud->so = NULL;
     noeud->se = NULL;
 
-    // noeud->limite_no = ;
-    // noeud->limite_se = ;
+    noeud->limite_no.lon = 0;
+    noeud->limite_no.lat = 0;
+    noeud->limite_se.lon = 0;
+    noeud->limite_se.lat = 0;
 
     return noeud;
 }
@@ -73,8 +75,6 @@ Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, U
         else 
             aqr->so = inserer_aqr(aqr->so, limite_no, limite_se, truc);
     }
-
-    return aqr;
 }
 
 
@@ -85,7 +85,7 @@ Un_noeud *construire_aqr(Un_elem *liste){
     if(!liste) return NULL; 
 
     Un_noeud * aqr = creer_noeud(liste->truc);                  //La racine de l'aqr est le 1er élément de la liste
-    aqr = inserer_aqr(aqr, construire_aqr(liste->suiv));        //Insertion des éléments de liste dans l'aqr
+    aqr = inserer_aqr(aqr, aqr->limite_no, aqr->limite_se, liste->suiv->truc);        //Insertion des éléments de liste dans l'aqr
 
     return aqr;
 }
