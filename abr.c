@@ -92,17 +92,21 @@ Un_truc *chercher_station(Un_nabr *abr, char *nom){
     if (!abr)                       //Cas où abr est vide
         return NULL; 
 
-    int comp = strcmp(abr->truc->data.sta.nom,nom);
+    int comp = strcmp(abr->truc->data.sta.nom, nom);
+    printf("\t nom abr : %s\n", abr->truc->data.sta.nom);
 
     if(!comp)                                           //La fonction vaut 0 si les deux chaines sont égales
         return abr->truc;
     
-    if (comp<0)
+    if (comp<0){
+        printf("\t going d\n");
         return chercher_station(abr->d, nom);           //Elle est négative si s1<s2
+    }
     
-    else 
+    else {
+        printf("\t going g\n");
         return chercher_station(abr->g, nom);           //Positive si s1>s2
-
+    }
 }
 
 
@@ -123,5 +127,8 @@ void afficher_abr(Un_nabr *abr){
         afficher_abr(abr->d);
     if (abr->g)
         afficher_abr(abr->g);
+    
+    if (!(abr->g) && !(abr->d))
+        printf(".\n");
 
 }
