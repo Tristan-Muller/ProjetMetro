@@ -9,6 +9,7 @@
 #include "station.h"
 #include "truc.h"
 #include "truc.c"
+#include "abr.c"
 
 
 
@@ -139,7 +140,7 @@ void detruire_liste_et_truc(Un_elem* liste){
 		tete = liste;
 	}
 }
-
+ 
 
 
 Un_elem *lire_stations(char *nom_du_fichier){
@@ -149,6 +150,49 @@ Un_elem *lire_stations(char *nom_du_fichier){
     if (flux == NULL){
         printf("Erreur lors de l'ouverture du fichier\n");
         return NULL;
+<<<<<<< HEAD
+=======
+    }else{
+        Un_elem *liste = NULL;
+        char ligne[100];
+        int i = 0;
+        int compt = 0;
+        
+        while (fgets(ligne, 100, flux) != NULL){
+            float lon, lat;
+            char *nom = (char *)malloc(100 * sizeof(char));
+            sscanf(ligne, "%f ; %f ; ", &lon, &lat);
+
+            for (i = 0; i < strlen(ligne); i++){
+                if (ligne[i] == ';'){
+                    compt++;
+                }if (compt == 2){
+                    strcpy(nom, ligne + i + 1);
+                    nom[strlen(nom)-1] = '\0';
+                    break;
+                }
+            }
+
+            Un_truc *truc = (Un_truc*)malloc(sizeof(Un_truc));
+            truc->type = STA;
+            truc->data.sta.nom = (char*)malloc(100*sizeof(char));
+            truc->coord.lon = lon;
+            truc->coord.lat = lat;
+            strcpy(truc->data.sta.nom, nom);
+            truc->user_val = 0.0;
+            truc->data.sta.tab_con = (Un_truc**)malloc(10*sizeof(Un_truc*));
+            truc->data.sta.nb_con = 0;
+            truc->data.sta.con_pcc = (Un_truc*)malloc(10*sizeof(Un_truc));
+
+            liste = inserer_liste_trie(liste, truc);
+			//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
+
+            compt = 0;
+        }
+        fclose(flux);
+
+        return liste;
+>>>>>>> 4a593916b0b0b75db26496145e64a9a03380495f
     }
 
 	Un_elem *liste = NULL;
@@ -262,10 +306,14 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
+<<<<<<< HEAD
 
 
 Un_elem *lire_connexions(char* nom_fichier){
 	//Crée une liste de connexion à partir d'un fichier
+=======
+Un_elem lire_connexions(char* nom_fichier, Un_nabr* abr){
+>>>>>>> 4a593916b0b0b75db26496145e64a9a03380495f
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -280,7 +328,7 @@ Un_elem *lire_connexions(char* nom_fichier){
 
 		char* stat_dep = (char*)malloc(100*sizeof(char));
 		char* stat_arr = (char*)malloc(100*sizeof(char));
-		char code;
+		char* code = (char*)malloc(5*sizeof(char));
 		char* temp = (char*)malloc(100*sizeof(char));
 		char* endPtr;
 		int i=0;
@@ -290,6 +338,17 @@ Un_elem *lire_connexions(char* nom_fichier){
 		int z=0;
 		int w=0;
 
+		/*
+		for (i = 0; i < strlen(new); i++){
+                if (new[i] == ';'){
+                    compt++;
+                }if (compt == 0){
+                    strcpy(code, new + i + 1);
+                    code[strlen(code)-1] = '\0';
+                }
+            }
+		*/
+
 		while(new[i]!='\n'){
 
 			if(new[i]==';'){
@@ -298,7 +357,7 @@ Un_elem *lire_connexions(char* nom_fichier){
 			}
 
 			if(compt==0){
-				code=new[i];
+				code[i]=new[i];
 				x++;
 			}
 
@@ -325,9 +384,26 @@ Un_elem *lire_connexions(char* nom_fichier){
 		stat_arr[z]='\0';
 		temp[w]='\0';
 
-		printf("Ligne=%c : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+		Un_truc* truc1 = chercher_station(abr, stat_dep);
+		Un_truc* truc2 = chercher_station(abr, stat_arr);
+		Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
+		//truc1->data.sta.tab_con
+        truc->type = CON;
+        truc->data.con.sta_dep = truc1;
+        truc->data.con.sta_arr = truc2;
+        truc->data.con.ligne = (Une_ligne*)malloc(sizeof(Une_ligne));
+        truc->data.con.ligne->code = (char*)malloc(5*sizeof(char));
+        printf("%s\n", truc->data.con.ligne->code);
+        strcpy(truc->data.con.ligne->code, code);
+        printf("%f\n", truc1->data.sta.nb_con);
+        truc1->data.sta.tab_con[truc1->data.sta.nb_con]=truc;
+        truc2->data.sta.tab_con[truc2->data.sta.nb_con]=truc;
+        truc1->data.sta.nb_con ++;
+        truc2->data.sta.nb_con ++;
 
-		free(stat_dep);	
+		printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+
+		free(stat_dep);
 		free(stat_arr);
 		free(temp);
 	}
@@ -377,28 +453,38 @@ int main(){
 	limites_zone(new, &limite_no, &limite_se);
 
 	printf("\n---LIMITES ZONES---\n\n");
+
 	printf("Longitude min : %f\n", limite_no.lon);
 	printf("Latitude max : %f\n", limite_no.lat);
 	printf("Longitude max : %f\n", limite_se.lon);
 	printf("Latitude min : %f\n", limite_se.lat);
 
 	//Revoir detruire ! (Je comprend pas pk ça marche pas)
-	detruire_liste_et_truc(new);
+	//detruire_liste_et_truc(new);
 
 	//affiche_station(new); //Normallement affiche ("Liste vide")
 
+
 	//N'affiche pas, donc tout n'a pas bien été desalloué
-	if(new==NULL){
+	/*if(new==NULL){
 	printf("Tout a bien été désalloué !");
-	}
+	}*/
 
 
 	printf("\n---FIN STATION---\n");
+
+	printf("\n---DEBUT ARBRE---\n");
+
+	Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
+	abr = construire_abr(new);
+
+
 	printf("\n---DEBUT CONNEXION---\n\n");
 
-	lire_connexions("connexion.csv");
+	lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
 
 	printf("\n---FIN CONNEXION---\n\n");
+
 	return 0;
 }
 
