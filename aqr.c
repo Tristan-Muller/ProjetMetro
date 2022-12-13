@@ -162,3 +162,25 @@ Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_c
 
     return liste;
 }
+
+
+
+void afficher_aqr(Un_noeud * aqr){
+    // Affiche les noeuds d'un aqr (fonction de test)
+    if (!aqr) return;
+
+    if (aqr->truc->type == STA)
+        printf("Sta : %s\n", aqr->truc->data.sta.nom);
+    else 
+        printf("Sta_dep : %s\n", aqr->truc->data.con.sta_dep->data.sta.nom);
+
+    if (aqr->ne) 
+        afficher_aqr(aqr->ne);
+    if (aqr->no)
+        afficher_aqr(aqr->no);
+    if (aqr->se)
+        afficher_aqr(aqr->se);
+    if (aqr->so)
+        afficher_aqr(aqr->so);
+
+}

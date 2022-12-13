@@ -7,6 +7,7 @@
 #include "liste.h"
 
 
+
 //Fonctions définies dans ce module 
 
 Un_nabr *creer_nabr(Un_truc *truc);
@@ -48,7 +49,7 @@ Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
     
     else 
         abr->d = inserer_abr(abr->d, n);
-
+    
     return abr;
 }
 
@@ -101,5 +102,26 @@ Un_truc *chercher_station(Un_nabr *abr, char *nom){
     
     else 
         return chercher_station(abr->g, nom);           //Positive si s1>s2
+
+}
+
+
+
+void afficher_abr(Un_nabr *abr){
+    // Affiche les noeuds d'un abr (fonction de test)
+    if (!abr) {
+        printf("##End of abr##\n"); 
+        return;
+    }
+
+    if (abr->truc->type == STA)
+        printf("Sta : %s\n", abr->truc->data.sta.nom);
+    else 
+        printf("Sta_dep : %s\n", abr->truc->data.con.sta_dep->data.sta.nom);
+
+    if (abr->d) 
+        afficher_abr(abr->d);
+    if (abr->g)
+        afficher_abr(abr->g);
 
 }

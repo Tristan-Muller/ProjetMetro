@@ -52,12 +52,12 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 	//Ajoute un truc dans une liste triée de truc
 
 	if(!truc){
-		printf("Le truc à inserer n'existe pas");
+		printf("Le truc à inserer n'existe pas\n");
 		return NULL;
 	}
 
 	if(truc->type != 0){
-		printf("Le truc n'est pas une station");
+		printf("Le truc n'est pas une station\n");
 		return liste;
 	}
 
@@ -155,6 +155,7 @@ Un_elem *lire_stations(char *nom_du_fichier){
 	Un_elem *liste = NULL;
 	char ligne[100];
 	int i = 0;
+	int ok = 0;
 	int compt = 0;
 
 	float lon, lat;
@@ -167,14 +168,15 @@ Un_elem *lire_stations(char *nom_du_fichier){
 	while (fgets(ligne, 100, flux)){					//On boucle sur tout le fichier
 		sscanf(ligne, "%f ; %f ; ", &lon, &lat);
 
-		for (i = 0; i < strlen(ligne); i++){
+		while ((i < strlen(ligne)) && (!ok)) {
 			if (ligne[i] == ';')
 				compt++;
 			if (compt == 2){
 				strcpy(nom, ligne + i + 1);
 				nom[strlen(nom)-1] = '\0';
-				break;
+				ok =1;
 			}
+			i++;
 		}
 
 		Un_truc *truc = (Un_truc *)malloc(sizeof(Un_truc));
@@ -203,6 +205,8 @@ Un_elem *lire_stations(char *nom_du_fichier){
 		//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
 
 		compt = 0;
+		i=0;
+		ok = 0;
 	}
 	fclose(flux);
 
@@ -243,6 +247,7 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 }
 
 
+
 /* Exercice 4 : CONNEXION */
 
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
@@ -262,6 +267,8 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	else deb->suiv = liste;
 	return deb;
 }
+
+
 
 Un_elem * lire_connexions(char* nom_fichier, Un_nabr* abr){
 	
@@ -387,51 +394,67 @@ int main(){
 
 	printf("\n---DEBUT STATION---\n\n");
 
-	Un_elem* new = lire_stations("flux.csv");
+		Un_elem* new = lire_stations("flux.csv");
 
-	//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
-	//affiche_station(new);
-	afficher_liste(new);
+		//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
+		//affiche_station(new);
+		afficher_liste(new);
 
-	FILE* fic = fopen("liste_station.csv","w");
-	ecrire_liste(fic,new);
-	fclose(fic);
+		FILE* fic = fopen("liste_station.csv","w");
+		ecrire_liste(fic,new);
+		fclose(fic);
 
-	Une_coord limite_no;
-	Une_coord limite_se;
+		Une_coord limite_no;
+		Une_coord limite_se;
 
-	limites_zone(new, &limite_no, &limite_se);
+		limites_zone(new, &limite_no, &limite_se);
 
-	printf("\n---LIMITES ZONES---\n\n");
+		printf("\n---LIMITES ZONES---\n\n");
 
-	printf("Longitude min : %f\n", limite_no.lon);
-	printf("Latitude max : %f\n", limite_no.lat);
-	printf("Longitude max : %f\n", limite_se.lon);
-	printf("Latitude min : %f\n", limite_se.lat);
+		printf("Longitude min : %f\n", limite_no.lon);
+		printf("Latitude max : %f\n", limite_no.lat);
+		printf("Longitude max : %f\n", limite_se.lon);
+		printf("Latitude min : %f\n", limite_se.lat);
 
-	//Revoir detruire ! (Je comprend pas pk ça marche pas)
-	//detruire_liste_et_truc(new);
+		//Revoir detruire ! (Je comprend pas pk ça marche pas)
+		//detruire_liste_et_truc(new);
 
-	//affiche_station(new); //Normallement affiche ("Liste vide")
+		//affiche_station(new); //Normallement affiche ("Liste vide")
 
 
-	//N'affiche pas, donc tout n'a pas bien été desalloué
-	/*if(new==NULL){
-	printf("Tout a bien été désalloué !");
-	}*/
+		//N'affiche pas, donc tout n'a pas bien été desalloué
+		/*if(new==NULL){
+		printf("Tout a bien été désalloué !");
+		}*/
 
 
 	printf("\n---FIN STATION---\n");
 
 	printf("\n---DEBUT ARBRE---\n");
 
-	Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
-	abr = construire_abr(new);
+		Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
+		abr = construire_abr(new);
+
+		afficher_abr(abr);
+
+		printf("\nRecherche\n");
+		Un_truc *sta = chercher_station(abr, "Le Blosne");
+
+		if (sta)
+			printf("%s\n", sta->data.sta.nom);
+		else 
+			printf("NO STA\n");
+			
+		Un_elem * seek = inserer_liste_trie(NULL,sta);
+		affiche_station(seek);
+
+	printf("\n---FIN ARBRE---\n");
+
 
 
 	printf("\n---DEBUT CONNEXION---\n\n");
 
-	lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+		lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
 
 	printf("\n---FIN CONNEXION---\n\n");
 
