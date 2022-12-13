@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -61,7 +62,7 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
     Un_nabr* abr = creer_nabr(liste_sta->truc); 
     abr = inserer_abr(abr, construire_abr(liste_sta->suiv));
 
-    return n;
+    return abr;
 }
 
 

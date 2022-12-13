@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "coord.h"
+#include "aqrtopo.h"
+#include "ligne.h"
+#include "liste.h"
+
+
 
 
 //Fonctions définies dans ce module
@@ -29,10 +35,10 @@ Un_noeud *creer_noeud(Un_truc *truc) {
         return NULL;
     }
 
-    Un_noeud noeud = (Un_noeud *) malloc(sizeof(Un_noeud *));
+    Un_noeud *noeud = (Un_noeud *) malloc(sizeof(Un_noeud *));
     if(!noeud){
         printf("ERREUR\n"); 
-        return NULL
+        return NULL;
     }
 
     noeud->truc = truc;
@@ -41,8 +47,8 @@ Un_noeud *creer_noeud(Un_truc *truc) {
     noeud->so = NULL;
     noeud->se = NULL;
 
-    noeud->limite_no = 0;
-    noeud->limite_se = 0;
+    // noeud->limite_no = ;
+    // noeud->limite_se = ;
 
     return noeud;
 }
@@ -79,9 +85,9 @@ Un_noeud *construire_aqr(Un_elem *liste){
     if(!liste) return NULL; 
 
     Un_noeud * aqr = creer_noeud(liste->truc);                  //La racine de l'aqr est le 1er élément de la liste
-    aqr = inserer_aqr(new, construire_aqr(liste->suiv));        //Insertion des éléments de liste dans l'aqr
+    aqr = inserer_aqr(aqr, construire_aqr(liste->suiv));        //Insertion des éléments de liste dans l'aqr
 
-    return aqr
+    return aqr;
 }
 
 
@@ -112,7 +118,7 @@ void detruire_aqr(Un_noeud *aqr){
 Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     //Cherche un truc dont la coord se trouve dans l'aqr
 
-    if((!aqr) || (!coord)) return NULL;
+    if((!aqr) || !(coord)) return NULL;
 
     if(aqr->truc->coord == coord){               //Cas où aqr est l'élément cherché
         printf("in AQR : found\n");
@@ -133,12 +139,15 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     }
 }
 
+
+
 Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_coord limite_se){
     //Renvoie une liste de trucs qui sont dans la zone définie par les limites _no et _se
 
     if (!aqr)                       //Cas où l'aqr est vide 
         return liste;               //On retourne la liste (doute là dessus)
 
+    int i = 0;
     Un_elem *elem = liste;
 
     while (elem->suiv) {
@@ -147,7 +156,7 @@ Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_c
     
     if ((aqr->truc->coord.lon > limite_no.lon) && (aqr->truc->coord.lat < limite_no.lat)){
         if ((aqr->truc->coord.lon < limite_se.lon) && (aqr->truc->coord.lat > limite_se.lat))
-
+            i++;
 
     }
 
