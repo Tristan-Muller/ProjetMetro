@@ -135,7 +135,7 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
         if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->no, coord); 
         else 
-            return chercher_aqr(aqr->so, coord); 
+            return chercher_aqr(aqr->so, coord);
     }
 }
 

@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "abr_type.h"
 #include "coord.h"
+#include "truc.h"
+#include "truc.c"
 #include "liste.h"
 #include "ligne.h"
 #include "station.h"
-#include "truc.h"
-#include "truc.c"
+#include "abr_type.h"
 #include "abr.c"
 
 
@@ -150,49 +150,6 @@ Un_elem *lire_stations(char *nom_du_fichier){
     if (flux == NULL){
         printf("Erreur lors de l'ouverture du fichier\n");
         return NULL;
-<<<<<<< HEAD
-=======
-    }else{
-        Un_elem *liste = NULL;
-        char ligne[100];
-        int i = 0;
-        int compt = 0;
-        
-        while (fgets(ligne, 100, flux) != NULL){
-            float lon, lat;
-            char *nom = (char *)malloc(100 * sizeof(char));
-            sscanf(ligne, "%f ; %f ; ", &lon, &lat);
-
-            for (i = 0; i < strlen(ligne); i++){
-                if (ligne[i] == ';'){
-                    compt++;
-                }if (compt == 2){
-                    strcpy(nom, ligne + i + 1);
-                    nom[strlen(nom)-1] = '\0';
-                    break;
-                }
-            }
-
-            Un_truc *truc = (Un_truc*)malloc(sizeof(Un_truc));
-            truc->type = STA;
-            truc->data.sta.nom = (char*)malloc(100*sizeof(char));
-            truc->coord.lon = lon;
-            truc->coord.lat = lat;
-            strcpy(truc->data.sta.nom, nom);
-            truc->user_val = 0.0;
-            truc->data.sta.tab_con = (Un_truc**)malloc(10*sizeof(Un_truc*));
-            truc->data.sta.nb_con = 0;
-            truc->data.sta.con_pcc = (Un_truc*)malloc(10*sizeof(Un_truc));
-
-            liste = inserer_liste_trie(liste, truc);
-			//printf("Longitude = %f ; Latitude = %f ; Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat, liste->truc->data.sta.nom);
-
-            compt = 0;
-        }
-        fclose(flux);
-
-        return liste;
->>>>>>> 4a593916b0b0b75db26496145e64a9a03380495f
     }
 
 	Un_elem *liste = NULL;
@@ -306,14 +263,7 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-<<<<<<< HEAD
-
-
-Un_elem *lire_connexions(char* nom_fichier){
-	//Crée une liste de connexion à partir d'un fichier
-=======
-Un_elem lire_connexions(char* nom_fichier, Un_nabr* abr){
->>>>>>> 4a593916b0b0b75db26496145e64a9a03380495f
+Un_elem * lire_connexions(char* nom_fichier, Un_nabr* abr){
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -395,7 +345,7 @@ Un_elem lire_connexions(char* nom_fichier, Un_nabr* abr){
         truc->data.con.ligne->code = (char*)malloc(5*sizeof(char));
         printf("%s\n", truc->data.con.ligne->code);
         strcpy(truc->data.con.ligne->code, code);
-        printf("%f\n", truc1->data.sta.nb_con);
+        printf("%d\n", truc1->data.sta.nb_con);
         truc1->data.sta.tab_con[truc1->data.sta.nb_con]=truc;
         truc2->data.sta.tab_con[truc2->data.sta.nb_con]=truc;
         truc1->data.sta.nb_con ++;
