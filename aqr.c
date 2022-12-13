@@ -118,9 +118,9 @@ void detruire_aqr(Un_noeud *aqr){
 Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     //Cherche un truc dont la coord se trouve dans l'aqr
 
-    if((!aqr) || !(coord)) return NULL;
+    if (!aqr) return NULL;
 
-    if(aqr->truc->coord == coord){               //Cas où aqr est l'élément cherché
+    if ((aqr->truc->coord.lon == coord.lon) && (aqr->truc->coord.lat == coord.lat)){               //Cas où aqr est l'élément cherché
         printf("in AQR : found\n");
         return aqr->truc;
     }
