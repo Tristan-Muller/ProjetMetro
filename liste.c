@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include "coord.h"
 #include "station.h"
 #include "truc.h"
@@ -19,6 +20,7 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
 /*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
+
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
@@ -54,7 +56,7 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 	
 	//Cas où la liste ne contient qu'un seul terme
-	if((maillon->truc->user_val)<(tmp->truc->user_val)){
+	if((maillon->truc->user_val)>(tmp->truc->user_val)){
 		tmp->suiv = maillon;
 		return tmp;
 	}
@@ -109,7 +111,7 @@ void detruire_liste_et_truc(Un_elem* liste){
 		tete = liste;
 	}
 }
- 
+
 
 
 Un_elem *lire_stations(char *nom_du_fichier){
@@ -145,7 +147,7 @@ Un_elem *lire_stations(char *nom_du_fichier){
             truc->coord.lon = lon;
             truc->coord.lat = lat;
             strcpy(truc->data.sta.nom, nom);
-            truc->user_val = 0.0;
+            truc->user_val = INFINITY;
             truc->data.sta.tab_con = (Un_truc**)malloc(10*sizeof(Un_truc*));
             truc->data.sta.nb_con = 0;
             truc->data.sta.con_pcc = (Un_truc*)malloc(10*sizeof(Un_truc));
@@ -304,7 +306,7 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 }
 
 
-//Fonction supplementaire pour vérification
+//Fonction supplementaire pour vérification pour verifier l'ordre dans la liste
 void affiche_station(Un_elem* liste){
 	Un_elem* tmp = NULL;
 	if(liste==NULL){
@@ -320,7 +322,7 @@ void affiche_station(Un_elem* liste){
 	}
 }
 
-//Fonction supplementaire pour verification 
+//Fonction supplementaire pour verification que l'arbre existe bien et que tout est bien rangé
 void affiche_prefixe(Un_nabr* abr){
 	if(abr==NULL){
 		return;
@@ -328,6 +330,63 @@ void affiche_prefixe(Un_nabr* abr){
 	printf("%s\n", abr->truc->data.sta.nom);
 	affiche_prefixe(abr->g);
 	affiche_prefixe(abr->d);
+}
+
+
+/*Exercice 6 : Exercice Plus Court Chemin*/
+
+
+Un_truc* extraire_deb_liste(Un_elem* liste){
+	return liste->truc;
+}
+
+
+Un_truc* extraire_liste(Un_elem** liste, Un_truc* truc){
+	//A faire
+}
+
+
+void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
+	Un_elem* tete = liste_sta;
+	printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
+	
+	while((tete->truc)!=(sta_dep) && (tete==NULL)){
+		tete = tete->suiv;
+	}
+
+	if(tete==NULL){
+		printf("La station de départ n'a pas été trouvé dans la liste de station\n");
+		return;
+	}
+
+	//printf("%s", tete->truc->data.sta.nom);
+	tete->truc->user_val = 0.0;
+
+	Un_elem* Q = NULL;
+	tete = liste_sta;
+
+	//On créé la liste Q triée avec les user_val
+	while(tete!=NULL){
+		Q = inserer_liste_trie(Q, tete->truc);
+		tete = tete->suiv;
+	}
+
+	//Affichage de la liste pour vérifier si c'est bien trié
+	Un_elem* tmp = Q;
+	while(tmp!=NULL){
+		printf("%s\t", tmp->truc->data.sta.nom);
+		printf("%f\n", tmp->truc->user_val);
+		tmp = tmp->suiv;
+	}
+	printf("\n");
+
+	while(Q!=NULL){
+
+	}
+
+	//for (int i = 0; i < liste_sta->truc->data.sta.nb_con; ++i){
+
+	//}
 }
 
 
@@ -380,17 +439,21 @@ int main(){
 	printf("\n---DEBUT CONNEXION---\n\n");
 
 	lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
-
 	/*
+	
 	printf("Verification tableau de connexion des stations:\n");
 	
 	for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
 		printf("%s", new->truc->data.sta.tab_con[i]);
 	}
-	*/ 
+	*/
 	//A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 
 	printf("\n---FIN CONNEXION---\n\n");
+
+	printf("\n---DEBUT PCC---\n\n");
+
+	dijkstra(new, new->truc);
 
 	return 0;
 }
