@@ -13,7 +13,10 @@ Ce dossier contient les fonctions nécessaires à la mise en place d'une simulat
     de carte de transport en communs, aidant l'utilisateur.rice à trouver son chemin entre deux stations
 
 Le fichier Makefile permet l'exectution du programme, et contient les différentes instructions pour la compilations
-    Pour exectuer le programme, ecrire $ make dans la barre de commande
+    Pour compiler le programme, entrer $ make dans la ligne de commande
+    Pour executer le programme, entrer $ make Do dans la ligne de commande
+    Pour recompiler les fichiers depuis le début, entrer $ make clean puis recommencez les deux instructions précédentes
+
 
 Les fichiers .c contiennent les fonctions permettant de réaliser le programme
 Les fichiers .h contiennent les definitions des différentes structures utilisées dans le programme

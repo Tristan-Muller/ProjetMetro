@@ -1,8 +1,18 @@
-all : abr.o  aqr.o  ligne.o  liste.o  truc.o
+all : main
+
 
 
 clean : 
-	rm *.o
+	rm *.o main
+
+Do : main.o 
+	./main
+
+
+
+main : abr.o aqr.o ligne.o liste.o truc.o
+	gcc -Wall -o main main.c
+
 
 
 abr.o : abr.c abr_type.h liste.h
