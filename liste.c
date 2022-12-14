@@ -268,13 +268,9 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-<<<<<<< HEAD
 
 
-Un_elem * lire_connexions(char* nom_fichier, Un_nabr* abr){
-=======
 Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
->>>>>>> 000be00ee89989b3544f6fcacb1710ff11d3c2a2
 	
 	FILE* fic = NULL;
 	fic = fopen(nom_fichier,"r");
@@ -356,12 +352,8 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         truc->data.con.ligne = (Une_ligne*)malloc(sizeof(Une_ligne));
         truc->data.con.ligne->code = (char*)malloc(1*sizeof(char));
         strcpy(truc->data.con.ligne->code, code);
-<<<<<<< HEAD
-        printf("%d\n", truc1->data.sta.nb_con);
-=======
         //printf("%s\n", truc->data.con.ligne->code);
         //printf("%d\n", truc2->data.sta.nb_con);
->>>>>>> 000be00ee89989b3544f6fcacb1710ff11d3c2a2
         truc1->data.sta.tab_con[truc1->data.sta.nb_con]=truc;
         truc2->data.sta.tab_con[truc2->data.sta.nb_con]=truc;
         truc1->data.sta.nb_con ++;
@@ -376,12 +368,8 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 	}
 	return NULL;
 
-<<<<<<< HEAD
 	fclose(fic);
-=======
-	fclose(flux);
 	return liste; //A voir si c'est bien liste qu'il faut retourner
->>>>>>> 000be00ee89989b3544f6fcacb1710ff11d3c2a2
 }
 
 
@@ -403,8 +391,8 @@ void affiche_station(Un_elem* liste){
 	}
 }
 
-<<<<<<< HEAD
-=======
+
+
 //Fonction supplementaire pour verification 
 void affiche_prefixe(Un_nabr* abr){
 	if(abr==NULL){
@@ -414,7 +402,6 @@ void affiche_prefixe(Un_nabr* abr){
 	affiche_prefixe(abr->g);
 	affiche_prefixe(abr->d);
 }
->>>>>>> 000be00ee89989b3544f6fcacb1710ff11d3c2a2
 
 
 int main(){
@@ -459,30 +446,9 @@ int main(){
 
 	printf("\n---DEBUT ARBRE---\n\n");
 
-<<<<<<< HEAD
-		Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
-		abr = construire_abr(new);
-
-		afficher_abr(abr);
-
-		printf("\nRecherche\n");
-		Un_truc *sta = chercher_station(abr, "Le Blosne");
-
-		if (sta)
-			printf("%s\n", sta->data.sta.nom);
-		else 
-			printf("NO STA\n");
-			
-		Un_elem * seek = inserer_liste_trie(NULL,sta);
-		affiche_station(seek);
-
-	printf("\n---FIN ARBRE---\n");
-
-=======
 	Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
 	abr = construire_abr(new);
 	affiche_prefixe(abr);
->>>>>>> 000be00ee89989b3544f6fcacb1710ff11d3c2a2
 
 
 	printf("\n---DEBUT CONNEXION---\n\n");

@@ -59,11 +59,13 @@ Un_nabr *construire_abr(Un_elem *liste_sta) {
 
     if(liste_sta==NULL) return NULL;
 
-    Un_nabr* n = creer_nabr(liste_sta->truc);
+    Un_nabr* abr= creer_nabr(liste_sta->truc);
+
     liste_sta = liste_sta->suiv;
+
     while (liste_sta!=NULL){
         Un_nabr* new = creer_nabr(liste_sta->truc); 
-        n = inserer_abr(n, new); //Tu avais mis *liste_sta +1 mais ce n'est pas un nombre donc je pense que t'avais voulu dire suivant
+        abr = inserer_abr(abr, new); //Tu avais mis *liste_sta +1 mais ce n'est pas un nombre donc je pense que t'avais voulu dire suivant
         liste_sta = liste_sta->suiv;
     }
 
