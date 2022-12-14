@@ -41,15 +41,14 @@ Un_nabr *creer_nabr(Un_truc *truc) {
 Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
     //Insert d'un noeud dans un ABR
 
-    if(!n) return abr;                  //Cas où le nouvel élément est nul 
-    if(!abr) return n;                  //Cas ou abr est nul
+    if(n==NULL) return abr;
+    if(abr==NULL) return n; 
 
-    if(strcmp(n->truc->data.sta.nom, abr->truc->data.sta.nom))      //La fonction revoie un entier positif si str1 est "plus grand" que str2
-        abr->g = inserer_abr(abr->g, n);
-    
+    if(strcmp(n->truc->data.sta.nom, abr->truc->data.sta.nom)<0)
+        abr->g = inserer_abr(abr->g,n);
     else 
-        abr->d = inserer_abr(abr->d, n);
-    
+        abr->d = inserer_abr(abr->d,n);
+
     return abr;
 }
 
@@ -58,10 +57,15 @@ Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n) {
 Un_nabr *construire_abr(Un_elem *liste_sta) {
     //Crée un ABR à partir d'une liste de stations
 
-    if(! liste_sta) return NULL;                        //Cas où liste_sta est vide
+    if(liste_sta==NULL) return NULL;
 
-    Un_nabr* abr = creer_nabr(liste_sta->truc); 
-    abr = inserer_abr(abr, construire_abr(liste_sta->suiv));
+    Un_nabr* n = creer_nabr(liste_sta->truc);
+    liste_sta = liste_sta->suiv;
+    while (liste_sta!=NULL){
+        Un_nabr* new = creer_nabr(liste_sta->truc); 
+        n = inserer_abr(n, new); //Tu avais mis *liste_sta +1 mais ce n'est pas un nombre donc je pense que t'avais voulu dire suivant
+        liste_sta = liste_sta->suiv;
+    }
 
     return abr;
 }
@@ -87,10 +91,19 @@ void detruire_abr(Un_nabr *abr) {
 
 
 Un_truc *chercher_station(Un_nabr *abr, char *nom){
-    //Recherche une station dans un ABR
+    /*Fonction permettant de rechercher une station dans un ABR*/
+    
+    if (nom==NULL){
+        printf("Pas de nom de station en argument\n");
+        return NULL;
+    }
 
-    if (!abr)                       //Cas où abr est vide
+    if (abr==NULL){
+        printf("Pas trouvé\n");
         return NULL; 
+    }
+
+    //printf("%s\n", abr->truc->data.sta.nom);
 
     int comp = strcmp(abr->truc->data.sta.nom, nom);
     printf("\t nom abr : %s\n", abr->truc->data.sta.nom);
@@ -132,3 +145,10 @@ void afficher_abr(Un_nabr *abr){
         printf(".\n");
 
 }
+
+/*
+int main(){
+    
+    
+    return 0;
+}*/
