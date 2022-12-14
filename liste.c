@@ -203,21 +203,21 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 	return deb;
 }
 
-Un_elem lire_connexions(char* nom_fichier, Un_nabr* abr){
+Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 	
 	FILE* flux = NULL;
 	flux = fopen(nom_fichier,"r");
 	if(flux==NULL){
 		printf("Erreur\n");
 	}
-
+	Un_elem *liste = NULL;
 	char new[100];
 
 	while(fgets(new,100,flux)!=NULL){
 
 		char* stat_dep = (char*)malloc(100*sizeof(char));
 		char* stat_arr = (char*)malloc(100*sizeof(char));
-		char* code = (char*)malloc(5*sizeof(char));
+		char* code = (char*)malloc(1*sizeof(char));
 		char* temp = (char*)malloc(100*sizeof(char));
 		char* endPtr;
 		int i=0;
@@ -276,28 +276,31 @@ Un_elem lire_connexions(char* nom_fichier, Un_nabr* abr){
 		Un_truc* truc1 = chercher_station(abr, stat_dep);
 		Un_truc* truc2 = chercher_station(abr, stat_arr);
 		Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
-		//truc1->data.sta.tab_con
+		//printf("%s\n", stat_arr);
+		//printf("%s\n", truc2->data.sta.nom);
         truc->type = CON;
         truc->data.con.sta_dep = truc1;
         truc->data.con.sta_arr = truc2;
         truc->data.con.ligne = (Une_ligne*)malloc(sizeof(Une_ligne));
-        truc->data.con.ligne->code = (char*)malloc(5*sizeof(char));
-        printf("%s\n", truc->data.con.ligne->code);
+        truc->data.con.ligne->code = (char*)malloc(1*sizeof(char));
         strcpy(truc->data.con.ligne->code, code);
-        printf("%f\n", truc1->data.sta.nb_con);
+        //printf("%s\n", truc->data.con.ligne->code);
+        //printf("%d\n", truc2->data.sta.nb_con);
         truc1->data.sta.tab_con[truc1->data.sta.nb_con]=truc;
         truc2->data.sta.tab_con[truc2->data.sta.nb_con]=truc;
         truc1->data.sta.nb_con ++;
         truc2->data.sta.nb_con ++;
 
 		printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
-
+        
+        liste = inserer_deb_liste(liste, truc);
 		free(stat_dep);
 		free(stat_arr);
 		free(temp);
 	}
 
 	fclose(flux);
+	return liste; //A voir si c'est bien liste qu'il faut retourner
 }
 
 
@@ -316,6 +319,17 @@ void affiche_station(Un_elem* liste){
 		}
 	}
 }
+
+//Fonction supplementaire pour verification 
+void affiche_prefixe(Un_nabr* abr){
+	if(abr==NULL){
+		return;
+	}
+	printf("%s\n", abr->truc->data.sta.nom);
+	affiche_prefixe(abr->g);
+	affiche_prefixe(abr->d);
+}
+
 
 int main(){
 
@@ -356,15 +370,25 @@ int main(){
 
 	printf("\n---FIN STATION---\n");
 
-	printf("\n---DEBUT ARBRE---\n");
+	printf("\n---DEBUT ARBRE---\n\n");
 
 	Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
 	abr = construire_abr(new);
+	affiche_prefixe(abr);
 
 
 	printf("\n---DEBUT CONNEXION---\n\n");
 
 	lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+
+	/*
+	printf("Verification tableau de connexion des stations:\n");
+	
+	for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
+		printf("%s", new->truc->data.sta.tab_con[i]);
+	}
+	*/ 
+	//A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 
 	printf("\n---FIN CONNEXION---\n\n");
 
