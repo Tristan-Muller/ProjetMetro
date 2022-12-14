@@ -19,11 +19,3 @@ liste.o : liste.c liste.h abr_type.h coord.h station.h truc.h truc.o
 
 truc.o : truc.c truc.h coord.h station.h
 	gcc -c truc.c
-
-
-
-liste : 
-	gcc -o liste liste.c
-
-do_liste : liste
-	./liste

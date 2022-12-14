@@ -6,7 +6,7 @@
 #include "aqrtopo.h"
 #include "ligne.h"
 #include "liste.h"
-
+#include "liste.c"
 
 
 
@@ -47,10 +47,10 @@ Un_noeud *creer_noeud(Un_truc *truc) {
     noeud->so = NULL;
     noeud->se = NULL;
 
-    noeud->limite_no.lon = 0;
-    noeud->limite_no.lat = 0;
-    noeud->limite_se.lon = 0;
-    noeud->limite_se.lat = 0;
+    noeud->limite_no.lon = truc->coord.lon;
+    noeud->limite_no.lat = truc->coord.lat;
+    noeud->limite_se.lon = truc->coord.lon;
+    noeud->limite_se.lat = truc->coord.lat;
 
     return noeud;
 }
@@ -146,19 +146,20 @@ Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_c
 
     if (!aqr)                       //Cas où l'aqr est vide 
         return liste;               //On retourne la liste (doute là dessus)
-
-    int i = 0;
-    Un_elem *elem = liste;
-
-    while (elem->suiv) {
-        elem = elem->suiv;
+    
+    if ((aqr->limite_no.lon > limite_no.lon) && (aqr->limite_no.lat < limite_no.lat)){          
+        if ((aqr->limite_se.lon < limite_se.lon) && (aqr->limite_se.lat > limite_se.lat))
+            liste = inserer_liste_trie(liste, aqr->truc);                       // Si le noeud appartient à la zone, il est ajouté à la zone
     }
     
-    if ((aqr->truc->coord.lon > limite_no.lon) && (aqr->truc->coord.lat < limite_no.lat)){
-        if ((aqr->truc->coord.lon < limite_se.lon) && (aqr->truc->coord.lat > limite_se.lat))
-            i++;
-
-    }
+    if (aqr->no)
+        liste = chercher_zone(aqr->no, liste, limite_no, limite_se);
+    if (aqr->ne)
+        liste = chercher_zone(aqr->ne, liste, limite_no, limite_se);
+    if (aqr->so)
+        liste = chercher_zone(aqr->so, liste, limite_no, limite_se);
+    if (aqr->se)
+        liste = chercher_zone(aqr->se, liste, limite_no, limite_se);
 
     return liste;
 }
