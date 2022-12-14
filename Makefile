@@ -1,4 +1,4 @@
-all : main
+all : Do
 
 
 
@@ -10,7 +10,7 @@ Do : main.o
 
 
 
-main : abr.o aqr.o ligne.o liste.o truc.o
+main.o : abr.o aqr.o ligne.o liste.o truc.o
 	gcc -Wall -o main main.c
 
 

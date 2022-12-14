@@ -18,9 +18,11 @@ int main();
 void intro(){
     // Affiche le message de bienvenue 
 
-    system("clear");
+    // system("clear");
     
-    printf("Bienvenue dans le Projet Metro !\n");
+    printf("\n____________________________________\n");
+
+    printf("\nBienvenue dans le Projet Metro !\n");
 }
 
 
