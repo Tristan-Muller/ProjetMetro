@@ -63,7 +63,7 @@ void pause(){
     printf("\n\nEnter 1 to continue\n");
     scanf("%d", &pause);
 
-    // system(clear);
+    system("clear");
 }
 
 
@@ -118,6 +118,8 @@ int main (){
     printf("NO : \tlon = %f \tlat = %f\net\n ", limite_no.lon, limite_no.lat);
     printf("SE : \tlon = %f \tlat = %f\n", limite_se.lon, limite_se.lat);
     
+    printf("\n---TEST STATION - FIN ---\n\n");
+
 
 
     pause();
@@ -141,6 +143,9 @@ int main (){
     else 
         printf("%s ; %f ; %f\n", cherch_sta->data.sta.nom, cherch_sta->coord.lat, cherch_sta->coord.lon);
 
+    printf("\n---TEST ABR - FIN ---\n\n");
+
+
 
     pause();
 
@@ -162,6 +167,8 @@ int main (){
     printf("Resultat de la recherche : \n");
     afficher_lignes(cherch_ligne);
 
+    printf("\n---TEST LIGNES - FIN ---\n\n");
+
 
 
     pause();
@@ -173,6 +180,8 @@ int main (){
     Un_elem* liste_con;
     printf("Création d'une liste de connexions à partir du fichier \"%s\"\n", connex_fic);
 	liste_con = lire_connexions(connex_fic, abr); 
+
+    printf("\n---TEST CONNEXIONS - FIN---\n\n");
 
 
 
@@ -214,6 +223,8 @@ int main (){
     liste_dans_zone = chercher_zone(aqr, liste_dans_zone, zone_no, zone_se);
     printf("Résultat de la recherche : \n");
     affiche_station(liste_dans_zone);
+    
+    printf("\n---TEST AQR - FIN---\n\n");
 
 
 
@@ -229,6 +240,8 @@ int main (){
     // detruire_lignes(ligne);
     printf("Libération de la mémoire de l'aqr\n");
     detruire_aqr(aqr);
+
+    printf("\n--- Libération Mémoire - Fin  ---\n\n");
 
     msg(ok);
     

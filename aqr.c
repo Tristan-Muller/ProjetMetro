@@ -120,13 +120,15 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     //Cherche un truc dont la coord se trouve dans l'aqr
 
     if (!aqr) return NULL;
+    printf("\n\t coord : %f, %f", coord.lon, coord.lat);
+    printf("\n\t aqr : %f, %f\n", aqr->truc->coord.lon,aqr->truc->coord.lat);
 
     if ((aqr->truc->coord.lon == coord.lon) && (aqr->truc->coord.lat == coord.lat)){               //Cas où aqr est l'élément cherché
         printf("in AQR : found\n");
         return aqr->truc;
     }
 
-    if (aqr->truc->coord.lon > coord.lon){
+    else if (aqr->truc->coord.lon > coord.lon){
         if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->ne, coord); 
         else 
@@ -136,7 +138,7 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
         if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->no, coord); 
         else 
-            return chercher_aqr(aqr->so, coord);
+            return chercher_aqr(aqr->so, coord);  
     }
 }
 
