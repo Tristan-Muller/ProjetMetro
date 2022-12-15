@@ -85,9 +85,16 @@ Un_noeud *construire_aqr(Un_elem *liste){
     Une_coord limite_no, limite_se;
     limites_zone(liste, &limite_no, &limite_se);
 
-    Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);                  //La racine de l'aqr est le 1er élément de la liste
-    aqr = inserer_aqr(aqr, limite_no, limite_se, liste->suiv->truc);        //Insertion des éléments de liste dans l'aqr
+    if (!liste->suiv)
+        return NULL;
 
+    Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);            //La racine de l'aqr est le 1er élément de la liste
+    
+    while(liste->suiv){
+        liste = liste->suiv;
+        aqr = inserer_aqr(aqr, limite_no, limite_se, liste->truc);        //Insertion des éléments de liste dans l'aqr
+    }
+    
     return aqr;
 }
 
