@@ -15,7 +15,7 @@ Ce dossier contient les fonctions nécessaires à la mise en place d'une simulat
 Le fichier Makefile permet l'exectution du programme, et contient les différentes instructions pour la compilations
     Pour compiler le programme, entrer $ make dans la ligne de commande
     Pour executer le programme, entrer $ make Do dans la ligne de commande
-    Pour recompiler les fichiers depuis le début, entrer $ make clean puis recommencez les deux instructions précédentes
+    Pour effacer les fichiers compilés, entrer $ make clean puis relancez les deux instructions précédentes
 
 
 Les fichiers .c contiennent les fonctions permettant de réaliser le programme
