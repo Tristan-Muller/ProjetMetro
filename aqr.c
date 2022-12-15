@@ -91,6 +91,7 @@ Un_noeud *construire_aqr(Un_elem *liste){
         liste = liste->suiv;
         aqr = inserer_aqr(aqr, limite_no, limite_se, liste->truc);        //Insertion des éléments de liste dans l'aqr
     }
+    printf("\n");
     
     return aqr;
 }
@@ -133,16 +134,24 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     }
 
     else if (aqr->truc->coord.lon > coord.lon){
-        if(aqr->truc->coord.lat > coord.lat)
+        if(aqr->truc->coord.lat > coord.lat){
+            printf("t_ne\n");
             return chercher_aqr(aqr->ne, coord); 
-        else 
+        }
+        else {
+            printf("t_se\n");
             return chercher_aqr(aqr->se, coord); 
+        }
     }
     else {
-        if(aqr->truc->coord.lat > coord.lat)
+        if(aqr->truc->coord.lat > coord.lat){
+            printf("t_no\n");
             return chercher_aqr(aqr->no, coord); 
-        else 
-            return chercher_aqr(aqr->so, coord);  
+        }
+        else {
+            printf("t_so\n");
+            return chercher_aqr(aqr->so, coord);
+        }
     }
 }
 
