@@ -328,6 +328,25 @@ void affiche_station(Un_elem* liste){
     }
 }
 
+
+
+void affiche_station_numero(Un_elem* liste){
+    Un_elem* tmp = NULL;
+    int i = 1;
+    if(liste==NULL || liste->truc==NULL){
+        printf("Liste vide");
+    }else{
+        tmp = liste;
+        while(tmp != NULL){
+            printf("%d : \t%s\n", i, tmp->truc->data.sta.nom);
+            tmp = tmp->suiv;
+            i++;
+        }
+    }
+}
+
+
+
 //Fonction supplementaire pour verification que l'arbre existe bien et que tout est bien rangé
 void affiche_prefixe(Un_nabr* abr){
     if(abr==NULL){
@@ -500,6 +519,7 @@ Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr){
         return liste_co;
     }
 
+    return NULL;
 }
 
 

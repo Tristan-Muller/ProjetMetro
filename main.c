@@ -71,6 +71,95 @@ int pause(){
 
 
 
+char * choix_sta_chemin(){
+    int choix = 0; 
+
+    scanf("%d", &choix);
+
+    if (choix < 16 && choix > 0){
+        if (choix<8){
+            if (choix == 1)
+                return "J.F Kennedy";
+            if (choix == 2)
+                return "Cesson-Viasilv";
+            if (choix == 3)
+                return "Atalante";
+            if (choix == 4)
+                return "Beaulieu-Université";
+            if (choix == 5)
+                return "Joliot-Curie-Chateaubriand";
+            if (choix == 6)
+                return "Les Gayeulles";
+            else 
+                return "Gros-Chêne";
+        }
+        else {
+            if (choix == 8)
+                return "Puits Lafond";
+            if (choix == 9)
+                return "Jules Ferry";
+            if (choix == 10)
+                return "Puis Vincennes";
+            if (choix == 11)
+                return "Saint Germain";
+            if (choix == 12)
+                return "Puits Duhamel";
+            if (choix == 13)
+                return "Colombiers";
+            if (choix == 14)
+                return "Mabilais";
+            else 
+                return "Puits Voltaire"; 
+        }
+    }
+
+    else if (choix >0) {
+        if (choix<24){
+            if (choix == 16)
+                return "Cleunay";
+            if (choix == 17)
+                return "La Courrouze";
+            if (choix == 18)
+                return "Saint-Jacques-Gaité";
+            if (choix == 19)
+                return "La Poterie";
+            if (choix == 20)
+                return "Le Blosne";
+            if (choix == 21)
+                return "Triangle";
+            if (choix == 22)
+                return "Italie";
+            else 
+                return "Henri Freville";
+        }
+        else {
+            if (choix == 24)
+                return "Clemenceau";
+            if (choix == 25)
+                return "Jacques Cartier";
+            if (choix == 26)
+                return "Gares";
+            if (choix == 27)
+                return "Charles de Gaulle";
+            if (choix == 28)
+                return "Republique";
+            if (choix == 29)
+                return "Sainte Anne";
+            if (choix == 30)
+                return "Anatole France";
+            if (choix == 31)
+                return "Pontchaillou-CHU";
+            if (choix == 32)
+                return "Villejean Universite"; 
+        }
+    }
+
+    printf("Puisque votre choix ne correspond à aucun numéro, nous choisirons la station numéro 1\n\n");
+    return "J.F Kennedy";
+}
+
+
+
 int main (){
     int ok = 0;                                             // Variable permettant d'afficher les messages adéquats
 
@@ -97,6 +186,8 @@ int main (){
     Un_noeud* aqr = NULL;
     Un_truc *cherch_aqr = NULL;
     Un_elem* liste_dans_zone = NULL;
+
+    char *sta_chemin = NULL;
 
     msg(ok);                                                // Message de bienvenue
     ok++;
@@ -237,16 +328,16 @@ int main (){
 
                             printf("\n---TEST PLUS COURT CHEMIN\n\n");
 
-                            char stat_dep[50];
+                            //char stat_dep[50];
                             //char* stat_arr;
                             printf("Voici la liste des stations : \n\n");
-                            affiche_station(liste_sta);
+                            affiche_station_numero(liste_sta);
 
-                            printf("\nChoisissez votre station de départ : ");
-                            scanf("%s", stat_dep);
-                            printf("\n");
+                            printf("\nChoisissez votre station de départ : \n(entrez le numero associé à la station)\n");
+                            sta_chemin = choix_sta_chemin();
+                            printf("Depuis %s, \n", sta_chemin);
 
-                            Un_truc* dep = chercher_station(abr , stat_dep);
+                            Un_truc* dep = chercher_station(abr , sta_chemin);
 
                             dijkstra(liste_sta, dep);
 
@@ -259,7 +350,7 @@ int main (){
         }
     }
 
-    //pause();
+    ok = pause();
 
 
     printf("\n--- Libération Mémoire ---\n\n");
@@ -273,7 +364,7 @@ int main (){
 
     printf("\n--- Libération Mémoire - Fin  ---\n\n");
 
-    msg(ok);
+    msg(10);
 
     
 	return 0;
