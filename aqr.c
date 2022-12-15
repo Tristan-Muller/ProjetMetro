@@ -22,7 +22,7 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord);
 Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_coord limite_se);
 void afficher_aqr(Un_noeud *aqr);
 
-
+Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 
 //Définition des fonctions
 
