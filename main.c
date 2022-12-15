@@ -207,13 +207,6 @@ int main (){
                             return 0;
                         }
 
-                        Une_coord zone_no;
-                        Une_coord zone_se;
-                        zone_no.lon = limite_no.lon+0.01;
-                        zone_no.lat = limite_no.lat-0.01;
-                        zone_se.lon = limite_se.lon-0.01;
-                        zone_se.lat = limite_se.lat+0.01;
-                        
                         printf("\nRecherche d'un élément dans l'aqr\n");
                         printf("Ici on cherche le 2e élément de la liste : %s", liste_sta->truc->data.sta.nom);
                         cherch_aqr = chercher_aqr(aqr, liste_sta->truc->coord);
@@ -221,6 +214,13 @@ int main (){
                             printf("\nElement non trouvé\n");
                         else 
                             printf("%s\n", cherch_aqr->data.sta.nom);
+
+                        Une_coord zone_no;
+                        Une_coord zone_se;
+                        zone_no.lon = limite_no.lon;
+                        zone_no.lat = limite_no.lat;
+                        zone_se.lon = limite_se.lon;
+                        zone_se.lat = limite_se.lat;
 
                         printf("\nRecherche d'une zone dans l'aqr\n"); 
                         printf("Ici on choisi la zone définie par : \n");
