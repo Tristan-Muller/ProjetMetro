@@ -72,6 +72,7 @@ int pause(){
 
 
 char * choix_sta_chemin(){
+    // Permet de choisir une station parmis les 32 proposées, renvoie automatiquement la 1ere si le numéro ne correspond à aucun des choix
     int choix = 0; 
 
     scanf("%d", &choix);
@@ -350,15 +351,13 @@ int main (){
         }
     }
 
-    ok = pause();
-
 
     printf("\n--- Libération Mémoire ---\n\n");
 
     printf("Libération de la mémoire des liste de stations, de connexions et de lignes\n");
 	// detruire_liste_et_truc(liste_sta);
     detruire_liste_et_truc(liste_con);
-    // detruire_lignes(ligne);
+    detruire_lignes(ligne);
     printf("Libération de la mémoire de l'aqr\n");
     detruire_aqr(aqr);
 

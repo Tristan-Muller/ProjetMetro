@@ -331,6 +331,7 @@ void affiche_station(Un_elem* liste){
 
 
 void affiche_station_numero(Un_elem* liste){
+    // Affiche les stations d'une liste avec un numéro associé en début de ligne
     Un_elem* tmp = NULL;
     int i = 1;
     if(liste==NULL || liste->truc==NULL){
