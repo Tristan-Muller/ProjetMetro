@@ -60,19 +60,27 @@ Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, U
     if (!aqr) return creer_noeud(truc, limite_no, limite_se);                     //Cas où aqr est NULL
 
     if (truc->coord.lon > aqr->truc->coord.lon){                                //Comparaison lon 
-            if (truc->coord.lat > aqr->truc->coord.lat)                         //Comparaison lat
+        if (truc->coord.lat > aqr->truc->coord.lat){                         //Comparaison lat
+            printf("inserer_ne\n");
             aqr->ne = inserer_aqr(aqr->ne, limite_no, limite_se, truc);
-        else 
+        }
+        else {
+            printf("inserer_se\n");
             aqr->se = inserer_aqr(aqr->se, limite_no, limite_se, truc);
+        }
     }
     else {
-        if (truc->coord.lat > aqr->truc->coord.lat) 
+        if (truc->coord.lat > aqr->truc->coord.lat) {
+            printf("inserer_no\n");
             aqr->no = inserer_aqr(aqr->no, limite_no, limite_se, truc);
-        else 
+        }
+        else {
+            printf("inserer_so\n");
             aqr->so = inserer_aqr(aqr->so, limite_no, limite_se, truc);
+        }
     }
 
-    return creer_noeud(truc, limite_no, limite_se); 
+    return aqr; 
 }
 
 
@@ -85,12 +93,10 @@ Un_noeud *construire_aqr(Un_elem *liste){
     Une_coord limite_no, limite_se;
     limites_zone(liste, &limite_no, &limite_se);
 
-    if (!liste->suiv)
-        return NULL;
-
     Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);            //La racine de l'aqr est le 1er élément de la liste
     
     while(liste->suiv){
+        printf(".\n");
         liste = liste->suiv;
         aqr = inserer_aqr(aqr, limite_no, limite_se, liste->truc);        //Insertion des éléments de liste dans l'aqr
     }
@@ -135,17 +141,25 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
         return aqr->truc;
     }
 
-    else if (aqr->truc->coord.lon > coord.lon){
-        if(aqr->truc->coord.lat > coord.lat)
+    else if (aqr->truc->coord.lon < coord.lon){
+        if(aqr->truc->coord.lat < coord.lat){
+            printf("t_ne\n");
             return chercher_aqr(aqr->ne, coord); 
-        else 
+        }
+        else {
+            printf("t_se\n");
             return chercher_aqr(aqr->se, coord); 
+        }
     }
     else {
-        if(aqr->truc->coord.lat > coord.lat)
+        if(aqr->truc->coord.lat < coord.lat){
+            printf("t_no\n");
             return chercher_aqr(aqr->no, coord); 
-        else 
-            return chercher_aqr(aqr->so, coord);  
+        }
+        else {
+            printf("t_so\n");
+            return chercher_aqr(aqr->so, coord);
+        }
     }
 }
 

@@ -198,14 +198,26 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 
 
 Un_elem* inserer_fin_liste(Un_elem* liste, Un_truc* truc){
+
     Un_elem* fin = (Un_elem*)malloc(sizeof(Un_elem));
+    if (!fin){
+        printf("Erreur d'allocation mémoire\n");
+        return liste;
+    }
     fin->truc = truc;
     if(liste==NULL){
         return fin;
     }
-    liste->suiv = fin;
+
+    Un_elem *tmp = liste;
+    while(tmp->suiv){
+        tmp = tmp->suiv;
+    } 
+
+    tmp->suiv = fin;
     return liste;
 }
+
 
 
 Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
@@ -315,6 +327,25 @@ void affiche_station(Un_elem* liste){
         }
     }
 }
+
+
+
+void affiche_station_numero(Un_elem* liste){
+    Un_elem* tmp = NULL;
+    int i = 1;
+    if(liste==NULL || liste->truc==NULL){
+        printf("Liste vide");
+    }else{
+        tmp = liste;
+        while(tmp != NULL){
+            printf("%d : \t%s\n", i, tmp->truc->data.sta.nom);
+            tmp = tmp->suiv;
+            i++;
+        }
+    }
+}
+
+
 
 //Fonction supplementaire pour verification que l'arbre existe bien et que tout est bien rangé
 void affiche_prefixe(Un_nabr* abr){
@@ -478,7 +509,7 @@ Un_elem *cherche_chemin(Un_truc *sta_arr){
         connexions_pcc = inserer_deb_liste(connexions_pcc, tmp_sta->data.sta.con_pcc);
         tmp_sta = tmp_sta->data.sta.con_pcc->data.con.sta_dep;
     }
-
+    
     return connexions_pcc;
 }
 
