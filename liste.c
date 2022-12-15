@@ -371,7 +371,7 @@ Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc){
 void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
     Un_elem* tete = liste_sta;
-    Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
+    //Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
     //printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
     
     while(strcmp((tete->truc->data.sta.nom),(sta_dep->data.sta.nom))!=0 && (tete!=NULL)){
@@ -476,7 +476,7 @@ Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr){
 
     Un_truc* dep = sta_dep;
     Un_elem* tete = liste_sta;
-    nb_station = 0;
+    int nb_station = 0;
     Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
 
     if(liste_co == NULL){
@@ -496,7 +496,8 @@ Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr){
 
     if(nb_station == 0){
         printf("Votre station de départ est votre station d'arrivée, vous êtes donc déjà arrivé à destination !");
-        return dep;
+        liste_co->truc = dep;
+        return liste_co;
     }
 
 }
