@@ -86,7 +86,7 @@ Un_noeud *construire_aqr(Un_elem *liste){
     limites_zone(liste, &limite_no, &limite_se);
 
     Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);                  //La racine de l'aqr est le 1er élément de la liste
-    aqr = inserer_aqr(aqr, aqr->limite_no, aqr->limite_se, liste->suiv->truc);        //Insertion des éléments de liste dans l'aqr
+    aqr = inserer_aqr(aqr, limite_no, limite_se, liste->suiv->truc);        //Insertion des éléments de liste dans l'aqr
 
     return aqr;
 }
