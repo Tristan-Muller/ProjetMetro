@@ -23,7 +23,8 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr);
 void affiche_station(Un_elem* liste);
 void affiche_prefixe(Un_nabr* abr);
 Un_truc* extraire_deb_liste(Un_elem* liste);
-Un_truc* extraire_liste(Un_elem** liste, Un_truc* truc);
+Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc);
 void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep);
+int sta_dans_liste (Un_elem *liste, char *sta);
 
 #endif
