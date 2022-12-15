@@ -3,59 +3,85 @@
 #include <string.h>
 #include <math.h>
 #include "coord.h"
-#include "station.h"
 #include "truc.h"
+#include "truc.c"
 #include "liste.h"
 #include "ligne.h"
+#include "station.h"
 #include "abr_type.h"
-#include "truc.c"
 #include "abr.c"
 
-/*Exercice 1 */
+
+
+//Fonctions définies dans ce module : 
+
+	/*Exercice 1 */
+void afficher_liste(Un_elem *liste);
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
 void ecrire_liste(FILE *flux, Un_elem *liste);
 void detruire_liste(Un_elem *liste);
 void detruire_liste_et_truc(Un_elem *liste);
 void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
-/*Exercice 4*/
+	/*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
 
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
-	if(truc->type != 0){
-		printf("Le truc n'est pas une station");
+
+//Définition des fonctions
+
+
+
+void afficher_liste(Un_elem *liste){
+	//Affiche une liste de trucs
+	if (!liste) printf("### End of the List ###\n"); 
+	else {
+		if (liste->truc->type == STA)
+			printf("STA : \tLon= %f ;\t Lat = %f ;\t Nom = %s\n", liste->truc->coord.lon,liste->truc->coord.lat,liste->truc->data.sta.nom);
+		else 
+			printf("CON : \tstation de départ : %s\n", liste->truc->data.con.sta_dep->data.sta.nom);
+		
+		if (liste->suiv)
+			afficher_liste(liste->suiv);
+	}
+}
+
+
+
+Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
+	//Ajoute un truc dans une liste triée de truc
+
+	if(!truc){
+		printf("Le truc à inserer n'existe pas\n");
 		return NULL;
 	}
 
-	if(truc==NULL){
-		printf("Le truc à inserer n'existe pas");
-		return NULL;
+	if(truc->type != 0){
+		printf("Le truc n'est pas une station\n");
+		return liste;
 	}
 
 	Un_elem *tmp = (Un_elem*)malloc(sizeof(Un_elem));
+	if (!tmp) {					//Si problème d'allocation 
+		printf("ERREUR\n");
+		return liste;
+	}
 
 	tmp->truc=truc;
 	tmp->suiv=NULL;
 
-	//printf("%f", tmp->truc->user_val);
-
-	//Si problème d'allocation
-	if(tmp==NULL){
-		printf("Erreur d'allocation de l'element\n");
-		return NULL;
-	}
 
 	//Cas si la liste est NULL
-	if(liste==NULL){
+	if(!liste){
 		return tmp;
 	}
 
 	Un_elem *maillon = liste;
-
 	
 	//Cas où la liste ne contient qu'un seul terme
+	//Cas où le 1er élément de la liste est déjà supérieur
 	if((maillon->truc->user_val)>(tmp->truc->user_val)){
 		tmp->suiv = maillon;
 		return tmp;
@@ -63,24 +89,25 @@ Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc){
 
 
 	//Cas général
-	while((maillon->suiv!=NULL) && ((maillon->suiv)->truc->user_val)<(tmp->truc->user_val)){
-
+	while((maillon->suiv) && ((maillon->suiv->truc->user_val)<(tmp->truc->user_val))){
 		maillon = maillon->suiv;
 	}
 
-	if(maillon->suiv == NULL){
+	if(!maillon->suiv)					//Si on arrive au bout de la liste, on ajoute tmp ou bout
 		maillon->suiv = tmp;
-		return liste;
+	else {								//Sinon, on ajoute tmp dans la liste après maillon
+		tmp->suiv = maillon->suiv;
+		maillon->suiv = tmp;
 	}
 
-	tmp->suiv = maillon->suiv;
-	maillon->suiv = tmp;
 	return liste;
 }
 
 
 
 void ecrire_liste(FILE *liste_station, Un_elem *liste){
+	//Ecrit une liste de stations dans un fichier
+	
 	Un_elem* tete = liste;
 	if(liste==NULL){
 		printf("Aucune liste à déchiffrer");
@@ -96,8 +123,13 @@ void ecrire_liste(FILE *liste_station, Un_elem *liste){
 
 
 void detruire_liste(Un_elem* liste){
+	//Détruit une liste de trucs
+
+	if (!liste)							//Si la liste est vide, RAS
+		return;
+
 	free(liste);
-	return;
+
 }
 
 
@@ -115,6 +147,7 @@ void detruire_liste_et_truc(Un_elem* liste){
 
 
 Un_elem *lire_stations(char *nom_du_fichier){
+	//Crée une liste de stations à partir d'un fichier .csv
 
     FILE *flux = fopen(nom_du_fichier, "r");
     if (flux == NULL){
@@ -196,26 +229,41 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 }
 
 
+
 /* Exercice 4 : CONNEXION */
 
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
+	//Insère un truc en tête d'une liste de trucs
+
+	if(!truc) return liste;
+
 	Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
+	if(!deb) {
+		printf("ERREUR\n");
+		return liste; 
+	}
+
 	deb->truc = truc;
-	deb->suiv = liste;
+
+	if (!liste) deb->suiv = NULL;
+	else deb->suiv = liste;
 	return deb;
 }
 
+
+
 Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 	
-	FILE* flux = NULL;
-	flux = fopen(nom_fichier,"r");
-	if(flux==NULL){
+	FILE* fic = NULL;
+	fic = fopen(nom_fichier,"r");
+	if(!fic){
 		printf("Erreur\n");
+		return NULL;
 	}
 	Un_elem *liste = NULL;
 	char new[100];
 
-	while(fgets(new,100,flux)!=NULL){
+	while(fgets(new,100,fic)!=NULL){
 
 		char* stat_dep = (char*)malloc(100*sizeof(char));
 		char* stat_arr = (char*)malloc(100*sizeof(char));
@@ -300,27 +348,31 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 		free(stat_arr);
 		free(temp);
 	}
+	return NULL;
 
-	fclose(flux);
+	fclose(fic);
 	return liste; //A voir si c'est bien liste qu'il faut retourner
 }
 
 
 //Fonction supplementaire pour vérification pour verifier l'ordre dans la liste
 void affiche_station(Un_elem* liste){
+	//Affiche une liste de stations
+
 	Un_elem* tmp = NULL;
 	if(liste==NULL){
 		printf("Liste vide");
 	}else{
 		tmp = liste;
 		while(tmp != NULL){
-			//printf("%f\n", tmp->truc->coord.lat);
-			//printf("%f\n", tmp->truc->coord.lon);
+			printf("%f\n", tmp->truc->coord.lat);
+			printf("%f\n", tmp->truc->coord.lon);
 			printf("%s\n", tmp->truc->data.sta.nom);
 			tmp = tmp->suiv;
 		}
 	}
 }
+
 
 //Fonction supplementaire pour verification que l'arbre existe bien et que tout est bien rangé
 void affiche_prefixe(Un_nabr* abr){
@@ -394,37 +446,38 @@ int main(){
 
 	printf("\n---DEBUT STATION---\n\n");
 
-	Un_elem* new = lire_stations("flux.csv");
+		Un_elem* new = lire_stations("flux.csv");
 
-	//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
-	affiche_station(new);
+		//Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
+		//affiche_station(new);
+		afficher_liste(new);
 
-	FILE* fic = fopen("liste_station.csv","w");
-	ecrire_liste(fic,new);
-	fclose(fic);
+		FILE* fic = fopen("liste_station.csv","w");
+		ecrire_liste(fic,new);
+		fclose(fic);
 
-	Une_coord limite_no;
-	Une_coord limite_se;
+		Une_coord limite_no;
+		Une_coord limite_se;
 
-	limites_zone(new, &limite_no, &limite_se);
+		limites_zone(new, &limite_no, &limite_se);
 
-	printf("\n---LIMITES ZONES---\n\n");
+		printf("\n---LIMITES ZONES---\n\n");
 
-	printf("Longitude min : %f\n", limite_no.lon);
-	printf("Latitude max : %f\n", limite_no.lat);
-	printf("Longitude max : %f\n", limite_se.lon);
-	printf("Latitude min : %f\n", limite_se.lat);
+		printf("Longitude min : %f\n", limite_no.lon);
+		printf("Latitude max : %f\n", limite_no.lat);
+		printf("Longitude max : %f\n", limite_se.lon);
+		printf("Latitude min : %f\n", limite_se.lat);
 
-	//Revoir detruire ! (Je comprend pas pk ça marche pas)
-	//detruire_liste_et_truc(new);
+		//Revoir detruire ! (Je comprend pas pk ça marche pas)
+		//detruire_liste_et_truc(new);
 
-	//affiche_station(new); //Normallement affiche ("Liste vide")
+		//affiche_station(new); //Normallement affiche ("Liste vide")
 
 
-	//N'affiche pas, donc tout n'a pas bien été desalloué
-	/*if(new==NULL){
-	printf("Tout a bien été désalloué !");
-	}*/
+		//N'affiche pas, donc tout n'a pas bien été desalloué
+		/*if(new==NULL){
+		printf("Tout a bien été désalloué !");
+		}*/
 
 
 	printf("\n---FIN STATION---\n");
