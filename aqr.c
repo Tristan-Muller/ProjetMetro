@@ -13,7 +13,7 @@
 //Fonctions définies dans ce module
 
 
-
+/*
 Un_noeud *creer_noeud(Un_truc *truc, Une_coord limite_no, Une_coord limite_se);
 Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, Un_truc *truc);
 Un_noeud *construire_aqr(Un_elem *liste); 
@@ -21,8 +21,13 @@ void detruire_aqr(Un_noeud *aqr);
 Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord); 
 Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_coord limite_se);
 void afficher_aqr(Un_noeud *aqr);
+<<<<<<< HEAD
 
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
+=======
+*/
+
+>>>>>>> cf4b6eb8a0308216fa4dfd7922fc161285a243f5
 
 //Définition des fonctions
 
