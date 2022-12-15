@@ -1,7 +1,8 @@
 #ifndef COORD_H
 #define COORD_H
 
-//Définition de la structure de coordonnée
+
+//Ce module contient la définition de la structure Une_coord, utilisée pour définir des coordonées
 
 
 typedef struct _une_coord{

@@ -10,6 +10,8 @@
 #include "truc.c"
 #include "abr.c"
 
+
+
 // Test fonction exercice 1 //
 int main(void) 
 {

@@ -7,6 +7,9 @@
 #include "liste.h"
 
 
+//Ce module contient les fonctions permmettant la création et manipulation d'ABR
+
+
 
 //Fonctions définies dans ce module 
 
@@ -147,10 +150,3 @@ void afficher_abr(Un_nabr *abr){
         printf(".\n");
 
 }
-
-/*
-int main(){
-    
-    
-    return 0;
-}*/

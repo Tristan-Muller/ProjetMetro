@@ -2,8 +2,7 @@
 #include <stdlib.h>
 
 
-// Module main, permettant l'appel ordonné des fonctions.
-
+// Ce module permet l'appel ordonné des fonctions, et fait ainsi fonctionner le programme
 
 
 // Fonctions définies dans le module : 

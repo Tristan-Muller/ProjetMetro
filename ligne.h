@@ -1,6 +1,10 @@
 #ifndef LIGNE_H
 #define LIGNE_H
 
+
+// Ce module contient la définition de la structure Une_ligne, utilisée dans le module ligne.c
+
+
 typedef struct _une_ligne {
 	char *code; 		//Le nom de la ligne A, B .., M1, M2, T1...
 	char *color;		//La couleur de la ligne #RRGGBB

@@ -2,14 +2,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+
 #include "coord.h"
 #include "station.h"
 #include "truc.h"
 #include "liste.h"
 #include "ligne.h"
 #include "abr_type.h"
+
 #include "truc.c"
 #include "abr.c"
+
+
+// Ce module contient les fonctions permettant de traiter les fichier long_lat.csv et connexion.csv
+// Ainsi que les fonctions gérant les listes de truc et l'ecriture dans un fichier
+
 
 /*Exercice 1 */
 Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);

@@ -7,6 +7,9 @@
 #include "truc.h"
 
 
+// Ce module contient les fonctions permettant de manipuler les truc
+
+
 //Fonctions définies dans ce module
 
 Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv);

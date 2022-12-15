@@ -8,7 +8,11 @@
 #include "ligne.h"
 
 
-//lligne : liste de lignes
+// Ce module contient les fonctions permettant de traiter le dossier ligne.csv
+
+
+// Terminologie : 
+// lligne : liste de lignes
 
 
 //Fonction contenues dans ce module : 

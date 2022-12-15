@@ -1,7 +1,13 @@
 #ifndef AQRTOPO_H
 #define AQRTOPO_H
+
 #include "truc.h"
 #include "coord.h"
+
+
+// Ce module contient la définition de la structure Un_noeud, utilisé dans les AQR
+
+
 
 typedef struct _un_noeud {
 	Un_truc *truc; 			//Une station ou une connexion
