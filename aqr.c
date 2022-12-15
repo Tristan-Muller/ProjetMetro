@@ -2,11 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "coord.h"
 #include "aqrtopo.h"
-#include "ligne.h"
-#include "liste.h"
-#include "liste.c"
 
 
 //Ce module contient les fonctions permmettant la création et manipulation d'AQR
@@ -16,7 +12,6 @@
 //Fonctions définies dans ce module
 
 
-/*
 Un_noeud *creer_noeud(Un_truc *truc, Une_coord limite_no, Une_coord limite_se);
 Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, Un_truc *truc);
 Un_noeud *construire_aqr(Un_elem *liste); 
@@ -24,7 +19,6 @@ void detruire_aqr(Un_noeud *aqr);
 Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord); 
 Un_elem *chercher_zone(Un_noeud *aqr, Un_elem *liste, Une_coord limite_no, Une_coord limite_se);
 void afficher_aqr(Un_noeud *aqr);
-*/
 
 
 //Définition des fonctions
@@ -39,7 +33,7 @@ Un_noeud *creer_noeud(Un_truc *truc, Une_coord limite_no, Une_coord limite_se) {
         return NULL;
     }
 
-    Un_noeud *noeud = (Un_noeud *) malloc(sizeof(Un_noeud *));
+    Un_noeud *noeud = (Un_noeud *) malloc(sizeof(Un_noeud));
     if(!noeud){
         printf("ERREUR\n"); 
         return NULL;
@@ -77,6 +71,8 @@ Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, U
         else 
             aqr->so = inserer_aqr(aqr->so, limite_no, limite_se, truc);
     }
+
+    return creer_noeud(truc, limite_no, limite_se); 
 }
 
 
@@ -116,7 +112,7 @@ void detruire_aqr(Un_noeud *aqr){
             detruire_aqr(aqr->se);
     }
 
-    free(aqr);
+    // free(aqr);
 }
 
 

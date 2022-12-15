@@ -13,4 +13,10 @@ typedef struct _une_ligne {
 	struct _une_ligne *suiv;
 } Une_ligne;
 
+void afficher_lignes(Une_ligne *lligne);
+Une_ligne *ajout_ligne(Une_ligne *lligne, char *code_fic, float v_moy, float interval, char *color_fic);
+Une_ligne *lire_lignes(char *nom_fichier);
+void detruire_lignes(Une_ligne *lligne);
+Une_ligne *chercher_ligne(Une_ligne *lligne, char *code);
+
 #endif

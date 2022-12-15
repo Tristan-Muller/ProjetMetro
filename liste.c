@@ -3,27 +3,11 @@
 #include <string.h>
 #include <math.h>
 
-#include "coord.h"
-#include "station.h"
-#include "truc.h"
 #include "liste.h"
-#include "ligne.h"
-#include "abr_type.h"
-
-#include "truc.c"
-#include "abr.c"
+ #include "abr.h"
+// #include "truc.c"
 
 
-// Ce module contient les fonctions permettant de traiter les fichier long_lat.csv et connexion.csv
-// Ainsi que les fonctions gérant les listes de truc et l'ecriture dans un fichier
-
-
-/*Exercice 1 */
-Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
-void ecrire_liste(FILE *flux, Un_elem *liste);
-void detruire_liste(Un_elem *liste);
-void detruire_liste_et_truc(Un_elem *liste);
-void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
 
 /*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
@@ -236,17 +220,6 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         int z=0;
         int w=0;
 
-        /*
-        for (i = 0; i < strlen(new); i++){
-                if (new[i] == ';'){
-                    compt++;
-                }if (compt == 0){
-                    strcpy(code, new + i + 1);
-                    code[strlen(code)-1] = '\0';
-                }
-            }
-        */
-
         while(new[i]!='\n'){
 
             if(new[i]==';'){
@@ -285,9 +258,11 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         Un_truc* truc1 = chercher_station(abr, stat_dep);
         Un_truc* truc2 = chercher_station(abr, stat_arr);
         Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
-        //printf("%s\n", stat_arr);
+        //printf("%s\n", truc1->data.sta.nom);
         //printf("%s\n", truc2->data.sta.nom);
         truc->type = CON;
+        truc->user_val = strtof(temp, &endPtr);
+        //printf("%f\n", truc->user_val);
         truc->data.con.sta_dep = truc1;
         truc->data.con.sta_arr = truc2;
         truc->data.con.ligne = (Une_ligne*)malloc(sizeof(Une_ligne));
@@ -300,7 +275,7 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         truc1->data.sta.nb_con ++;
         truc2->data.sta.nb_con ++;
 
-        printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+        printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
         
         liste = inserer_deb_liste(liste, truc);
         free(stat_dep);
@@ -349,7 +324,7 @@ Un_truc* extraire_deb_liste(Un_elem* liste){
 
 
 Un_truc* extraire_liste(Un_elem** liste, Un_truc* truc){
-    //A faire
+    return truc;    
 }
 
 
@@ -397,72 +372,72 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 }
 
 
-int main(){
+// int main(){
 
-    printf("\n---DEBUT STATION---\n\n");
+//     printf("\n---DEBUT STATION---\n\n");
 
-    Un_elem* new = lire_stations("flux.csv");
+//     Un_elem* new = lire_stations("flux.csv");
 
-    //Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
-    affiche_station(new);
+//     //Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
+//     affiche_station(new);
 
-    FILE* fic = fopen("liste_station.csv","w");
-    ecrire_liste(fic,new);
-    fclose(fic);
+//     FILE* fic = fopen("liste_station.csv","w");
+//     ecrire_liste(fic,new);
+//     fclose(fic);
 
-    Une_coord limite_no;
-    Une_coord limite_se;
+//     Une_coord limite_no;
+//     Une_coord limite_se;
 
-    limites_zone(new, &limite_no, &limite_se);
+//     limites_zone(new, &limite_no, &limite_se);
 
-    printf("\n---LIMITES ZONES---\n\n");
+//     printf("\n---LIMITES ZONES---\n\n");
 
-    printf("Longitude min : %f\n", limite_no.lon);
-    printf("Latitude max : %f\n", limite_no.lat);
-    printf("Longitude max : %f\n", limite_se.lon);
-    printf("Latitude min : %f\n", limite_se.lat);
+//     printf("Longitude min : %f\n", limite_no.lon);
+//     printf("Latitude max : %f\n", limite_no.lat);
+//     printf("Longitude max : %f\n", limite_se.lon);
+//     printf("Latitude min : %f\n", limite_se.lat);
 
-    //Revoir detruire ! (Je comprend pas pk ça marche pas)
-    //detruire_liste_et_truc(new);
+//     //Revoir detruire ! (Je comprend pas pk ça marche pas)
+//     //detruire_liste_et_truc(new);
 
-    //affiche_station(new); //Normallement affiche ("Liste vide")
-
-
-    //N'affiche pas, donc tout n'a pas bien été desalloué
-    /*if(new==NULL){
-    printf("Tout a bien été désalloué !");
-    }*/
+//     //affiche_station(new); //Normallement affiche ("Liste vide")
 
 
-    printf("\n---FIN STATION---\n");
-
-    printf("\n---DEBUT ARBRE---\n\n");
-
-    Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
-    abr = construire_abr(new);
-    affiche_prefixe(abr);
+//     //N'affiche pas, donc tout n'a pas bien été desalloué
+//     /*if(new==NULL){
+//     printf("Tout a bien été désalloué !");
+//     }*/
 
 
-    printf("\n---DEBUT CONNEXION---\n\n");
+//     printf("\n---FIN STATION---\n");
 
-    lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
-    /*
+//     printf("\n---DEBUT ARBRE---\n\n");
+
+//     Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
+//     abr = construire_abr(new);
+//     affiche_prefixe(abr);
+
+
+//     printf("\n---DEBUT CONNEXION---\n\n");
+
+//     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+//     /*
+//     printf("Verification tableau de connexion des stations:\n");
     
-    printf("Verification tableau de connexion des stations:\n");
-    
-    for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
-        printf("%s", new->truc->data.sta.tab_con[i]);
-    }
-    */
-    //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
+//     for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
+//         Un_truc* p = new->truc->data.sta.tab_con[i];
+//         printf("%s - %s", p->data.con.sta_dep, p->data.con.sta_arr);
+//     }
+//     */
+//     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 
-    printf("\n---FIN CONNEXION---\n\n");
+//     printf("\n---FIN CONNEXION---\n\n");
 
-    printf("\n---DEBUT PCC---\n\n");
+//     printf("\n---DEBUT PCC---\n\n");
 
-    dijkstra(new, new->truc);
+//     dijkstra(new, new->truc);
 
-    return 0;
-}
+//     return 0;
+// }
 
-/* Exercice 1 à terminer, qq fonction à verif et à mettre dans le main */
+// /* Exercice 1 à terminer, qq fonction à verif et à mettre dans le main */
