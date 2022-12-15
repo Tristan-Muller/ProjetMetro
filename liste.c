@@ -198,14 +198,26 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
 
 
 Un_elem* inserer_fin_liste(Un_elem* liste, Un_truc* truc){
+
     Un_elem* fin = (Un_elem*)malloc(sizeof(Un_elem));
-    deb->truc = truc;
+    if (!fin){
+        printf("Erreur d'allocation mémoire\n");
+        return liste;
+    }
+    fin->truc = truc;
     if(liste==NULL){
         return fin;
     }
-    liste->suiv = fin;
+
+    Un_elem *tmp = liste;
+    while(tmp->suiv){
+        tmp = tmp->suiv;
+    } 
+
+    tmp->suiv = fin;
     return liste;
 }
+
 
 
 Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
@@ -356,7 +368,7 @@ Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc){
 }
 
 
-Un_elem* dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
+void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
     Un_elem* tete = liste_sta;
     Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
