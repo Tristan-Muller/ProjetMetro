@@ -2,23 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "coord.h"
-#include "station.h"
-#include "liste.h"
 #include "ligne.h"
-
-
-//lligne : liste de lignes
-
-
-//Fonction contenues dans ce module : 
-
-void afficher_lignes(Une_ligne *lligne);
-Une_ligne *ajout_ligne(Une_ligne *lligne, char *code_fic, float v_moy, float interval, char *color_fic);
-Une_ligne *lire_lignes(char *nom_fichier);
-void detruire_lignes(Une_ligne *lligne);
-Une_ligne *chercher_ligne(Une_ligne *lligne, char *code);
-
 
 
 //Définition des fonctions : 

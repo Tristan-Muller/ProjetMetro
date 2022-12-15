@@ -2,21 +2,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "coord.h"
-#include "station.h"
-#include "truc.h"
-#include "liste.h"
-#include "ligne.h"
-#include "abr_type.h"
-#include "truc.c"
-#include "abr.c"
 
-/*Exercice 1 */
-Un_elem *inserer_liste_trie(Un_elem *liste, Un_truc *truc);
-void ecrire_liste(FILE *flux, Un_elem *liste);
-void detruire_liste(Un_elem *liste);
-void detruire_liste_et_truc(Un_elem *liste);
-void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se);
+#include "liste.h"
+#include "abr.c"
+#include "truc.c"
+
+
 
 /*Exercice 4*/
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc);
@@ -229,17 +220,6 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         int z=0;
         int w=0;
 
-        /*
-        for (i = 0; i < strlen(new); i++){
-                if (new[i] == ';'){
-                    compt++;
-                }if (compt == 0){
-                    strcpy(code, new + i + 1);
-                    code[strlen(code)-1] = '\0';
-                }
-            }
-        */
-
         while(new[i]!='\n'){
 
             if(new[i]==';'){
@@ -278,9 +258,11 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         Un_truc* truc1 = chercher_station(abr, stat_dep);
         Un_truc* truc2 = chercher_station(abr, stat_arr);
         Un_truc* truc = (Un_truc*)malloc(sizeof(Un_truc));
-        //printf("%s\n", stat_arr);
+        //printf("%s\n", truc1->data.sta.nom);
         //printf("%s\n", truc2->data.sta.nom);
         truc->type = CON;
+        truc->user_val = strtof(temp, &endPtr);
+        //printf("%f\n", truc->user_val);
         truc->data.con.sta_dep = truc1;
         truc->data.con.sta_arr = truc2;
         truc->data.con.ligne = (Une_ligne*)malloc(sizeof(Une_ligne));
@@ -293,7 +275,7 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
         truc1->data.sta.nb_con ++;
         truc2->data.sta.nb_con ++;
 
-        printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
+        printf("Ligne=%s : Station de depart = %s \n          Station d'arrivée = %s \n          Durée=%f\n\n", code, stat_dep, stat_arr, strtof(temp, &endPtr));
         
         liste = inserer_deb_liste(liste, truc);
         free(stat_dep);
@@ -440,11 +422,11 @@ int main(){
 
     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
     /*
-    
     printf("Verification tableau de connexion des stations:\n");
     
     for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
-        printf("%s", new->truc->data.sta.tab_con[i]);
+        Un_truc* p = new->truc->data.sta.tab_con[i];
+        printf("%s - %s", p->data.con.sta_dep, p->data.con.sta_arr);
     }
     */
     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions

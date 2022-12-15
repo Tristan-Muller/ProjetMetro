@@ -2,15 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "coord.h"
-#include "station.h"
 #include "truc.h"
-
-
-//Fonctions définies dans ce module
-
-Un_truc *creer_truc(Une_coord coord, Ttype type, Tdata data, double uv);
-void detruire_truc(Un_truc *truc);
 
 
 

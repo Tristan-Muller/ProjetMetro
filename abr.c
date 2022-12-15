@@ -2,19 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "truc.h"
 #include "abr_type.h"
-#include "liste.h"
-
-
-
-//Fonctions définies dans ce module 
-
-Un_nabr *creer_nabr(Un_truc *truc);
-Un_nabr *inserer_abr(Un_nabr *abr, Un_nabr *n);
-Un_nabr *construire_abr(Un_elem *liste_sta);
-void detruire_abr(Un_nabr *abr);
-Un_truc *chercher_station(Un_nabr *abr, char *nom);
 
 
 
@@ -108,18 +96,18 @@ Un_truc *chercher_station(Un_nabr *abr, char *nom){
     //printf("%s\n", abr->truc->data.sta.nom);
 
     int comp = strcmp(abr->truc->data.sta.nom, nom);
-    printf("\t nom abr : %s\n", abr->truc->data.sta.nom);
+    //printf("\t nom abr : %s\n\n", abr->truc->data.sta.nom);
 
     if(!comp)                                           //La fonction vaut 0 si les deux chaines sont égales
         return abr->truc;
     
     if (comp<0){
-        printf("\t going d\n");
+        //printf("\t going d\n");
         return chercher_station(abr->d, nom);           //Elle est négative si s1<s2
     }
     
     else {
-        printf("\t going g\n");
+        //printf("\t going g\n");
         return chercher_station(abr->g, nom);           //Positive si s1>s2
     }
 }
@@ -147,10 +135,3 @@ void afficher_abr(Un_nabr *abr){
         printf(".\n");
 
 }
-
-/*
-int main(){
-    
-    
-    return 0;
-}*/

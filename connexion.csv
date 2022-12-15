@@ -12,11 +12,10 @@ A;Henri Freville;Italie;0.99375
 A;Italie;Triangle;1.03125
 A;Triangle;Le Blosne;0.9
 A;Le Blosne;La Poterie;1.35
-
-B;Saint-Jacques - Gaité;La Courrouze;1.6505
+B;Saint-Jacques-Gaité;La Courrouze;1.6505
 B;La Courrouze;Cleunay;1.1150
 B;Cleunay;Puits Voltaire;1.4855
-B;Puis Voltaire;Mabilais;0.9325
+B;Puits Voltaire;Mabilais;0.9325
 B;Mabilais;Colombiers;1.42
 B;Colombiers;Gares;0.8175
 B;Gares;Puits Duhamel;1.2150
@@ -24,10 +23,10 @@ B;Puits Duhamel;Saint Germain;1.5325
 B;Saint Germain;Sainte Anne;1.1
 B;Sainte Anne;Puis Vincennes;0.75
 B;Puis Vincennes;Jules Ferry;1.6275
-B;Jules Ferry; Puits Lafond;0.9525
+B;Jules Ferry;Puits Lafond;0.9525
 B;Puits Lafond;Gros-Chêne;1.2925
 B;Gros-Chêne;Les Gayeulles;1.5825
-B;Les Gayeulles;Joliot-Curie - Chateaubriand;0.9225
-B;Joliot-Curie - -Chateaubriand; Beaulieu-Université;1.1475
+B;Les Gayeulles;Joliot-Curie-Chateaubriand;0.9225
+B;Joliot-Curie-Chateaubriand;Beaulieu-Université;1.1475
 B;Beaulieu-Université;Atalante;1.4
-B;Atalante;Cesson-Viasilva;1.2975
+B;Atalante;Cesson-Viasilv;1.2975
