@@ -230,6 +230,25 @@ int main (){
 
     pause();
 
+    printf("\n---TEST PLUS COURT CHEMIN\n\n");
+
+    char stat_dep[50];
+    //char* stat_arr;
+    printf("Voici la liste des stations : \n\n");
+    affiche_station(liste_sta);
+
+    printf("\nChoisissez votre station de départ : ");
+    scanf("%s", stat_dep);
+    printf("\n");
+
+    Un_truc* dep = chercher_station(abr , stat_dep);
+
+    dijkstra(liste_sta, dep);
+
+
+    printf("\n---TEST PLUS COURT CHEMIN - FIN---\n\n");
+
+    //pause();
 
 
     printf("\n--- Libération Mémoire ---\n\n");

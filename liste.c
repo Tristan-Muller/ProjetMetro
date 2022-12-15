@@ -196,6 +196,18 @@ Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
     return deb;
 }
 
+
+Un_elem* inserer_fin_liste(Un_elem* liste, Un_truc* truc){
+    Un_elem* fin = (Un_elem*)malloc(sizeof(Un_elem));
+    deb->truc = truc;
+    if(liste==NULL){
+        return fin;
+    }
+    liste->suiv = fin;
+    return liste;
+}
+
+
 Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
     
     FILE* flux = NULL;
@@ -344,14 +356,13 @@ Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc){
 }
 
 
-void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
+Un_elem* dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
     Un_elem* tete = liste_sta;
-    int somme = 0;
-
+    Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
     //printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
     
-    while((tete->truc)!=(sta_dep) && (tete==NULL)){
+    while(strcmp((tete->truc->data.sta.nom),(sta_dep->data.sta.nom))!=0 && (tete!=NULL)){
         tete = tete->suiv;
     }
 
@@ -378,19 +389,19 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
         //Affichage de la liste pour vérifier si c'est bien trié
         Un_elem* tmp = Q;
         while(tmp!=NULL){
-            printf("%s\t", tmp->truc->data.sta.nom);
-            printf("%f\n", tmp->truc->user_val);
+            //printf("%s\t", tmp->truc->data.sta.nom);
+            //printf("%f\n", tmp->truc->user_val);
             tmp = tmp->suiv;
         }
         tmp=Q;
         
-        printf("\n");
+        //printf("\n");
         
         for(int i=0; i<(Q->truc->data.sta.nb_con); i++){
 
             Un_truc* connect = Q->truc->data.sta.tab_con[i];
 
-            printf("%s - %s\n\n", connect->data.con.sta_dep->data.sta.nom, connect->data.con.sta_arr->data.sta.nom);
+            //printf("%s - %s\n\n", connect->data.con.sta_dep->data.sta.nom, connect->data.con.sta_arr->data.sta.nom);
 
             if(strcmp(connect->data.con.sta_dep->data.sta.nom, Q->truc->data.sta.nom)!=0){
                 if(sta_dans_liste(Q, connect->data.con.sta_dep->data.sta.nom)==1){
@@ -423,15 +434,16 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
                     }
                 }
             }
+            tmp = Q;
         }
         tmp = Q;
         
         while(tmp!=NULL){
-            printf("%s\t", tmp->truc->data.sta.nom);
-            printf("%f\n", tmp->truc->user_val);
+            //printf("%s\t", tmp->truc->data.sta.nom);
+            //printf("%f\n", tmp->truc->user_val);
             tmp = tmp->suiv;
         }
-        printf("\n");
+        //printf("\n");
         
         //On met Q2 à Q->suiv pour avancer la liste
         Q2 = Q->suiv;
@@ -441,11 +453,42 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
     tete = liste_sta;
     while(tete!=NULL){
-        printf("%f\t", tete->truc->user_val);
-        printf("%s\n", tete->truc->data.sta.nom);
+        printf("Il faut  %f  min\t", tete->truc->user_val);
+        printf("pour aller à %s\n", tete->truc->data.sta.nom);
         tete = tete->suiv;
     }
 }
+
+
+Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr){
+
+    Un_truc* dep = sta_dep;
+    Un_elem* tete = liste_sta;
+    nb_station = 0;
+    Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
+
+    if(liste_co == NULL){
+        printf("Erreur lors de l'allocation de la liste de connexions pour le plus court chemin");
+        return NULL;
+    }
+
+    liste_co->truc = dep;
+
+    //Cas général
+    printf("Pour aller jusqu'à %s le plus rapidement possible, il faut passer par: ", sta_arr->data.sta.nom);
+    while((strcmp(dep->data.sta.nom, sta_arr->data.sta.nom)!=0) && tete!=NULL){
+
+
+        tete = tete->suiv;
+    }
+
+    if(nb_station == 0){
+        printf("Votre station de départ est votre station d'arrivée, vous êtes donc déjà arrivé à destination !");
+        return dep;
+    }
+
+}
+
 
 
 int sta_dans_liste (Un_elem *liste, char *sta){
@@ -539,7 +582,7 @@ int sta_dans_liste (Un_elem *liste, char *sta){
     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 =======
 //     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
-//     /*
+//     
 //     printf("Verification tableau de connexion des stations:\n");
     
 //     for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
