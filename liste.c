@@ -192,6 +192,9 @@ void limites_zone(Un_elem *liste, Une_coord *limite_no, Une_coord *limite_se){
 Un_elem *inserer_deb_liste(Un_elem *liste, Un_truc *truc){
     Un_elem* deb = (Un_elem*)malloc(sizeof(Un_elem));
     deb->truc = truc;
+    if(liste == NULL){
+        return deb;
+    }
     deb->suiv = liste;
     return deb;
 }
@@ -440,10 +443,12 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
                     }
                     if(tmp->truc->user_val==INFINITY){
                         tmp->truc->user_val = connect->data.con.sta_arr->user_val + connect->user_val;
+                        connect->data.con.sta_arr->data.sta.con_pcc = connect;
                     }
                     else{
                         if(tmp->truc->user_val > connect->data.con.sta_arr->user_val + connect->user_val){
                             tmp->truc->user_val = connect->data.con.sta_arr->user_val + connect->user_val;
+                            connect->data.con.sta_arr->data.sta.con_pcc = connect;
                         }
                     }
                 }
@@ -456,10 +461,12 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
                     }
                     if(tmp->truc->user_val==INFINITY){
                         tmp->truc->user_val = connect->data.con.sta_dep->user_val + connect->user_val;
+                        connect->data.con.sta_dep->data.sta.con_pcc = connect;
                     }
                     else{
                         if(tmp->truc->user_val > (connect->data.con.sta_dep->user_val + connect->user_val)){
                             tmp->truc->user_val = connect->data.con.sta_dep->user_val + connect->user_val;
+                            connect->data.con.sta_dep->data.sta.con_pcc = connect;
                         }
                     }
                 }
@@ -491,7 +498,6 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
 
 Un_elem *cherche_chemin(Un_truc *sta_arr){
-
     if (sta_arr == NULL) {
         printf("La station n'existe pas\n");
         return NULL;
@@ -502,15 +508,16 @@ Un_elem *cherche_chemin(Un_truc *sta_arr){
         return NULL;
     }
 
-    Un_elem *connexions_pcc=NULL; 
-    Un_truc *tmp_sta=sta_arr;
-    
+    Un_elem *liste_connexions_pcc = NULL; 
+    Un_truc *tmp_sta = sta_arr;
+
     while (tmp_sta->data.sta.con_pcc != NULL) {
-        connexions_pcc = inserer_deb_liste(connexions_pcc, tmp_sta->data.sta.con_pcc);
-        tmp_sta = tmp_sta->data.sta.con_pcc->data.con.sta_dep;
+        liste_connexions_pcc = inserer_deb_liste(liste_connexions_pcc, tmp_sta->data.sta.con_pcc);
+        tmp_sta = tmp_sta->data.sta.con_pcc->data.con.sta_arr;
+
     }
-    
-    return connexions_pcc;
+
+    return liste_connexions_pcc;
 }
 
 
