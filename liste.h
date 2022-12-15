@@ -1,10 +1,15 @@
 #ifndef LISTE_H
 #define LISTE_H
+
 #include "truc.h"
 #include "coord.h"
 #include "connexion.h"
 #include "abr_type.h"
 #include "ligne.h"
+
+
+
+// Ce module contient la définition de la structure Un_elem, utilisée dans les listes de truc
 
 
 typedef struct _un_elem {

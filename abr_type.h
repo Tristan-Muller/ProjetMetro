@@ -1,6 +1,13 @@
 #ifndef ABR_TYPE_H
 #define ABR_TYPE_H
+
 #include "truc.h"
+
+
+
+// Ce module contient la définition de la structure Un_nabr utilisée dans les ABR
+
+
 
 typedef struct _un_nabr {
 	Un_truc *truc; 		//La station

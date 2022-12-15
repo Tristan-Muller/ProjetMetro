@@ -76,6 +76,10 @@ Une_ligne *lire_lignes(char *nom_fichier){
         ok = fscanf(fic, "%s ; %f ; %f ; %s", code_fic, &v_moy, &interval, color_fic);
     }
 
+    // Pour les tests, nous avions ajouté les ligens suivantes : 
+    // C ; 99 ; 9 ; #******
+    // D ; 11 ; 1 ; _______
+
     fclose(fic);
  
     return lligne;

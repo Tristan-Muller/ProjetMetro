@@ -1,8 +1,12 @@
 #ifndef TRUC_H
 #define TRUC_H
+
 #include "station.h"
 #include "connexion.h"  
 #include "coord.h"
+
+
+// Ce module contient les définitions des structures Tdata et Un_truc, utilisées tout au long du programme
 
 
 typedef enum _ttype {STA, CON} Ttype;

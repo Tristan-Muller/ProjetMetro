@@ -5,6 +5,9 @@
 #include "aqrtopo.h"
 
 
+//Ce module contient les fonctions permmettant la création et manipulation d'AQR
+
+
 
 //Fonctions définies dans ce module
 
@@ -30,7 +33,7 @@ Un_noeud *creer_noeud(Un_truc *truc, Une_coord limite_no, Une_coord limite_se) {
         return NULL;
     }
 
-    Un_noeud *noeud = (Un_noeud *) malloc(sizeof(Un_noeud *));
+    Un_noeud *noeud = (Un_noeud *) malloc(sizeof(Un_noeud));
     if(!noeud){
         printf("ERREUR\n"); 
         return NULL;
@@ -68,6 +71,8 @@ Un_noeud *inserer_aqr(Un_noeud *aqr, Une_coord limite_no, Une_coord limite_se, U
         else 
             aqr->so = inserer_aqr(aqr->so, limite_no, limite_se, truc);
     }
+
+    return creer_noeud(truc, limite_no, limite_se); 
 }
 
 
@@ -80,9 +85,16 @@ Un_noeud *construire_aqr(Un_elem *liste){
     Une_coord limite_no, limite_se;
     limites_zone(liste, &limite_no, &limite_se);
 
-    Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);                  //La racine de l'aqr est le 1er élément de la liste
-    aqr = inserer_aqr(aqr, aqr->limite_no, aqr->limite_se, liste->suiv->truc);        //Insertion des éléments de liste dans l'aqr
+    if (!liste->suiv)
+        return NULL;
 
+    Un_noeud * aqr = creer_noeud(liste->truc, limite_no, limite_se);            //La racine de l'aqr est le 1er élément de la liste
+    
+    while(liste->suiv){
+        liste = liste->suiv;
+        aqr = inserer_aqr(aqr, limite_no, limite_se, liste->truc);        //Insertion des éléments de liste dans l'aqr
+    }
+    
     return aqr;
 }
 
@@ -107,7 +119,7 @@ void detruire_aqr(Un_noeud *aqr){
             detruire_aqr(aqr->se);
     }
 
-    free(aqr);
+    // free(aqr);
 }
 
 
@@ -115,13 +127,15 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
     //Cherche un truc dont la coord se trouve dans l'aqr
 
     if (!aqr) return NULL;
+    printf("\n\t coord : %f, %f", coord.lon, coord.lat);
+    printf("\n\t aqr : %f, %f\n", aqr->truc->coord.lon,aqr->truc->coord.lat);
 
     if ((aqr->truc->coord.lon == coord.lon) && (aqr->truc->coord.lat == coord.lat)){               //Cas où aqr est l'élément cherché
         printf("in AQR : found\n");
         return aqr->truc;
     }
 
-    if (aqr->truc->coord.lon > coord.lon){
+    else if (aqr->truc->coord.lon > coord.lon){
         if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->ne, coord); 
         else 
@@ -131,7 +145,7 @@ Un_truc *chercher_aqr(Un_noeud *aqr, Une_coord coord){
         if(aqr->truc->coord.lat > coord.lat)
             return chercher_aqr(aqr->no, coord); 
         else 
-            return chercher_aqr(aqr->so, coord);
+            return chercher_aqr(aqr->so, coord);  
     }
 }
 

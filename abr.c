@@ -6,7 +6,6 @@
 #include "abr.h"
 
 
-
 //Definition des fonctions
 
 Un_nabr *creer_nabr(Un_truc *truc) {

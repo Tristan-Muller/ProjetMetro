@@ -56,7 +56,7 @@ void detruire_truc(Un_truc *truc){
 	else
 		free(truc);
 
-	printf("Mem Truc Désalouée\n");
+	// printf("Mem Truc Désalouée\n");
 }
 
 

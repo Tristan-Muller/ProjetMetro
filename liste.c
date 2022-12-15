@@ -4,8 +4,8 @@
 #include <math.h>
 
 #include "liste.h"
-#include "abr.c"
-#include "truc.c"
+ #include "abr.h"
+// #include "truc.c"
 
 
 
@@ -464,30 +464,30 @@ int sta_dans_liste (Un_elem *liste, char *sta){
 }
 
 
-int main(){
+// int main(){
 
-    printf("\n---DEBUT STATION---\n\n");
+//     printf("\n---DEBUT STATION---\n\n");
 
-    Un_elem* new = lire_stations("flux.csv");
+//     Un_elem* new = lire_stations("flux.csv");
 
-    //Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
-    affiche_station(new);
+//     //Regarde si la liste est bien triée selon user val et s'il n'y a pas de problème au niveau des stations
+//     affiche_station(new);
 
-    FILE* fic = fopen("liste_station.csv","w");
-    ecrire_liste(fic,new);
-    fclose(fic);
+//     FILE* fic = fopen("liste_station.csv","w");
+//     ecrire_liste(fic,new);
+//     fclose(fic);
 
-    Une_coord limite_no;
-    Une_coord limite_se;
+//     Une_coord limite_no;
+//     Une_coord limite_se;
 
-    limites_zone(new, &limite_no, &limite_se);
+//     limites_zone(new, &limite_no, &limite_se);
 
-    printf("\n---LIMITES ZONES---\n\n");
+//     printf("\n---LIMITES ZONES---\n\n");
 
-    printf("Longitude min : %f\n", limite_no.lon);
-    printf("Latitude max : %f\n", limite_no.lat);
-    printf("Longitude max : %f\n", limite_se.lon);
-    printf("Latitude min : %f\n", limite_se.lat);
+//     printf("Longitude min : %f\n", limite_no.lon);
+//     printf("Latitude max : %f\n", limite_no.lat);
+//     printf("Longitude max : %f\n", limite_se.lon);
+//     printf("Latitude min : %f\n", limite_se.lat);
 
     //Revoir detruire ! (Je comprend pas pk ça marche pas)
     /*detruire_liste_et_truc(new);
@@ -500,18 +500,32 @@ int main(){
     printf("Tout a bien été désalloué !");
     }*/
 
-    printf("\n---FIN STATION---\n");
+    //printf("\n---FIN STATION---\n");
 
-    printf("\n---DEBUT ARBRE---\n\n");
+//     //Revoir detruire ! (Je comprend pas pk ça marche pas)
+//     //detruire_liste_et_truc(new);
 
-    Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
-    abr = construire_abr(new);
-    affiche_prefixe(abr);
+//     //affiche_station(new); //Normallement affiche ("Liste vide")
 
 
-    printf("\n---DEBUT CONNEXION---\n\n");
+//     //N'affiche pas, donc tout n'a pas bien été desalloué
+//     /*if(new==NULL){
+//     printf("Tout a bien été désalloué !");
+//     }*/
 
-    lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+
+//     printf("\n---FIN STATION---\n");
+
+//     printf("\n---DEBUT ARBRE---\n\n");
+
+//     Un_nabr* abr = (Un_nabr*)malloc(sizeof(Un_nabr));
+//     abr = construire_abr(new);
+//     affiche_prefixe(abr);
+
+
+//     printf("\n---DEBUT CONNEXION---\n\n");
+
+    /*lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
     
     printf("Verification tableau de connexion des stations:\n");
     
@@ -523,14 +537,25 @@ int main(){
         printf("%s - %s\n", p->data.con.sta_dep->data.sta.nom, p->data.con.sta_arr->data.sta.nom);
     }
     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
+=======
+//     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+//     /*
+//     printf("Verification tableau de connexion des stations:\n");
+    
+//     for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
+//         Un_truc* p = new->truc->data.sta.tab_con[i];
+//         printf("%s - %s", p->data.con.sta_dep, p->data.con.sta_arr);
+//     }
+//     */
+//     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 
-    printf("\n---FIN CONNEXION---\n\n");
+//     printf("\n---FIN CONNEXION---\n\n");
 
-    printf("\n---DEBUT PCC---\n\n");
+//     printf("\n---DEBUT PCC---\n\n");
 
-    dijkstra(new, new->truc);
+//     dijkstra(new, new->truc);
 
-    return 0;
-}
+//     return 0;
+// }
 
-/* Exercice 1 à terminer, qq fonction à verif et à mettre dans le main */
+// /* Exercice 1 à terminer, qq fonction à verif et à mettre dans le main */

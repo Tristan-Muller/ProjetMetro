@@ -1,4 +1,4 @@
-all : Do
+all : main.o
 
 
 
