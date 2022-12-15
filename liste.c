@@ -421,14 +421,16 @@ int main(){
     printf("\n---DEBUT CONNEXION---\n\n");
 
     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
-    /*
+    
     printf("Verification tableau de connexion des stations:\n");
     
-    for(int i=0; i<(0,new->truc->data.sta.nb_con); i++){
-        Un_truc* p = new->truc->data.sta.tab_con[i];
-        printf("%s - %s", p->data.con.sta_dep, p->data.con.sta_arr);
+    //Vérification Tableau de Connexion pour Gares
+    Un_truc* g = chercher_station(abr, "Gares");
+    
+    for(int i=0; i<(g->data.sta.nb_con); i++){
+        Un_truc* p = g->data.sta.tab_con[i];
+        printf("%s - %s\n", p->data.con.sta_dep->data.sta.nom, p->data.con.sta_arr->data.sta.nom);
     }
-    */
     //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
 
     printf("\n---FIN CONNEXION---\n\n");
