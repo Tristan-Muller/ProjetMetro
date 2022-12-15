@@ -359,7 +359,6 @@ Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc){
 void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
     Un_elem* tete = liste_sta;
-    //Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
     //printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
     
     while(strcmp((tete->truc->data.sta.nom),(sta_dep->data.sta.nom))!=0 && (tete!=NULL)){
@@ -460,34 +459,27 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 }
 
 
-Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr){
+Un_elem *cherche_chemin(Un_truc *sta_arr){
 
-    Un_truc* dep = sta_dep;
-    Un_elem* tete = liste_sta;
-    int nb_station = 0;
-    Un_elem* liste_co = (Un_elem*)malloc(sizeof(Un_elem));
-
-    if(liste_co == NULL){
-        printf("Erreur lors de l'allocation de la liste de connexions pour le plus court chemin");
+    if (sta_arr == NULL) {
+        printf("La station n'existe pas\n");
         return NULL;
     }
 
-    liste_co->truc = dep;
-
-    //Cas général
-    printf("Pour aller jusqu'à %s le plus rapidement possible, il faut passer par: ", sta_arr->data.sta.nom);
-    while((strcmp(dep->data.sta.nom, sta_arr->data.sta.nom)!=0) && tete!=NULL){
-
-
-        tete = tete->suiv;
+    if (sta_arr->data.sta.con_pcc == NULL) {
+        printf("Pas de chemin pour rejoindre la station\n");
+        return NULL;
     }
 
-    if(nb_station == 0){
-        printf("Votre station de départ est votre station d'arrivée, vous êtes donc déjà arrivé à destination !");
-        liste_co->truc = dep;
-        return liste_co;
+    Un_elem *connexions_pcc=NULL; 
+    Un_truc *tmp_sta=sta_arr;
+    
+    while (tmp_sta->data.sta.con_pcc != NULL) {
+        connexions_pcc = inserer_deb_liste(connexions_pcc, tmp_sta->data.sta.con_pcc);
+        tmp_sta = tmp_sta->data.sta.con_pcc->data.con.sta_dep;
     }
 
+    return connexions_pcc;
 }
 
 

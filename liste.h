@@ -31,7 +31,7 @@ Un_truc* extraire_deb_liste(Un_elem* liste);
 Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc);
 void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep);
 int sta_dans_liste (Un_elem *liste, char *sta);
-Un_elem* cherche_chemin(Un_elem* liste_sta, Un_truc* sta_dep, Un_truc* sta_arr);
+Un_elem* cherche_chemin(Un_truc* sta_arr);
 Un_elem* inserer_fin_liste(Un_elem* liste, Un_truc* truc);
 
 #endif

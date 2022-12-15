@@ -233,7 +233,7 @@ int main (){
     printf("\n---TEST PLUS COURT CHEMIN\n\n");
 
     char stat_dep[50];
-    //char* stat_arr;
+    char* stat_arr;
     printf("Voici la liste des stations : \n\n");
     affiche_station(liste_sta);
 
@@ -241,9 +241,20 @@ int main (){
     scanf("%s", stat_dep);
     printf("\n");
 
+    printf("\nChoisissez votre station d'arrivée : ");
+    scanf("%s", stat_arr);
+
     Un_truc* dep = chercher_station(abr , stat_dep);
 
     dijkstra(liste_sta, dep);
+    printf("\n");
+
+    Un_elem* co = cherche_chemin();
+    printf("Pour arriver jusque : %s, il faut passer par :\n", stat_arr);
+    while(co->suiv!=NULL){
+        printf("%s \npuis ", co->truc->data.con.sta_dep->data.sta.nom);
+        co = co->suiv;
+    }
 
 
     printf("\n---TEST PLUS COURT CHEMIN - FIN---\n\n");
