@@ -291,7 +291,7 @@ Un_elem *lire_connexions(char* nom_fichier, Un_nabr* abr){
 //Fonction supplementaire pour vérification pour verifier l'ordre dans la liste
 void affiche_station(Un_elem* liste){
     Un_elem* tmp = NULL;
-    if(liste==NULL){
+    if(liste==NULL || liste->truc==NULL){
         printf("Liste vide");
     }else{
         tmp = liste;
@@ -319,18 +319,37 @@ void affiche_prefixe(Un_nabr* abr){
 
 
 Un_truc* extraire_deb_liste(Un_elem* liste){
+
+    if (liste == NULL){
+        printf("La liste n'existe pas");
+        return NULL;
+    }
+
     return liste->truc;
 }
 
 
-Un_truc* extraire_liste(Un_elem** liste, Un_truc* truc){
-    return truc;    
+Un_truc* extraire_liste(Un_elem* liste, Un_truc* truc){
+    
+    while((liste->truc->data.sta.nom != truc->data.sta.nom) && liste!=NULL){
+        liste = liste->suiv;
+    }
+
+    if (liste==NULL){
+        printf("Nous ne pouvons pas extraire d'une liste un truc qui n'existe pas\n");
+        return NULL;
+    } 
+
+    return liste->truc;
 }
 
 
 void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
+
     Un_elem* tete = liste_sta;
-    printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
+    int somme = 0;
+
+    //printf("%s \t %s\n", liste_sta->truc->data.sta.nom, sta_dep->data.sta.nom);
     
     while((tete->truc)!=(sta_dep) && (tete==NULL)){
         tete = tete->suiv;
@@ -345,30 +364,103 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
     tete->truc->user_val = 0.0;
 
     Un_elem* Q = NULL;
-    tete = liste_sta;
+    Un_elem* Q2 = liste_sta;
 
-    //On créé la liste Q triée avec les user_val
+
+    while(Q2!=NULL){
+
+        //On créé la liste Q triée avec les user_val
+        while(Q2!=NULL){
+            Q = inserer_liste_trie(Q, Q2->truc);
+            Q2 = Q2->suiv;
+        }
+
+        //Affichage de la liste pour vérifier si c'est bien trié
+        Un_elem* tmp = Q;
+        while(tmp!=NULL){
+            printf("%s\t", tmp->truc->data.sta.nom);
+            printf("%f\n", tmp->truc->user_val);
+            tmp = tmp->suiv;
+        }
+        tmp=Q;
+        
+        printf("\n");
+        
+        for(int i=0; i<(Q->truc->data.sta.nb_con); i++){
+
+            Un_truc* connect = Q->truc->data.sta.tab_con[i];
+
+            printf("%s - %s\n\n", connect->data.con.sta_dep->data.sta.nom, connect->data.con.sta_arr->data.sta.nom);
+
+            if(strcmp(connect->data.con.sta_dep->data.sta.nom, Q->truc->data.sta.nom)!=0){
+                if(sta_dans_liste(Q, connect->data.con.sta_dep->data.sta.nom)==1){
+                    while((strcmp(tmp->truc->data.sta.nom, connect->data.con.sta_dep->data.sta.nom)!=0) && tmp!=NULL){
+                        tmp = tmp->suiv;
+                    }
+                    if(tmp->truc->user_val==INFINITY){
+                        tmp->truc->user_val = connect->data.con.sta_arr->user_val + connect->user_val;
+                    }
+                    else{
+                        if(tmp->truc->user_val > connect->data.con.sta_arr->user_val + connect->user_val){
+                            tmp->truc->user_val = connect->data.con.sta_arr->user_val + connect->user_val;
+                        }
+                    }
+                }
+            }
+
+            if(strcmp(connect->data.con.sta_arr->data.sta.nom, Q->truc->data.sta.nom)!=0){
+                if(sta_dans_liste(Q, connect->data.con.sta_arr->data.sta.nom)==1){
+                    while(strcmp(tmp->truc->data.sta.nom, connect->data.con.sta_arr->data.sta.nom)!=0){
+                        tmp = tmp->suiv;
+                    }
+                    if(tmp->truc->user_val==INFINITY){
+                        tmp->truc->user_val = connect->data.con.sta_dep->user_val + connect->user_val;
+                    }
+                    else{
+                        if(tmp->truc->user_val > (connect->data.con.sta_dep->user_val + connect->user_val)){
+                            tmp->truc->user_val = connect->data.con.sta_dep->user_val + connect->user_val;
+                        }
+                    }
+                }
+            }
+        }
+        tmp = Q;
+        
+        while(tmp!=NULL){
+            printf("%s\t", tmp->truc->data.sta.nom);
+            printf("%f\n", tmp->truc->user_val);
+            tmp = tmp->suiv;
+        }
+        printf("\n");
+        
+        //On met Q2 à Q->suiv pour avancer la liste
+        Q2 = Q->suiv;
+        //On met Q à NULL pour pouvoir recreer une liste 
+        Q = NULL;
+    }
+
+    tete = liste_sta;
     while(tete!=NULL){
-        Q = inserer_liste_trie(Q, tete->truc);
+        printf("%f\t", tete->truc->user_val);
+        printf("%s\n", tete->truc->data.sta.nom);
         tete = tete->suiv;
     }
+}
 
-    //Affichage de la liste pour vérifier si c'est bien trié
-    Un_elem* tmp = Q;
-    while(tmp!=NULL){
-        printf("%s\t", tmp->truc->data.sta.nom);
-        printf("%f\n", tmp->truc->user_val);
-        tmp = tmp->suiv;
-    }
-    printf("\n");
 
-    while(Q!=NULL){
+int sta_dans_liste (Un_elem *liste, char *sta){
+    // Renvoie 0 si la station de nom sta n'est pas dans la liste de trucs
+    // Renvoie 1 si elle l'est
 
-    }
+    if (!liste || !liste->truc) return 0;               // Si la liste est vide, on renvoie 0 
 
-    //for (int i = 0; i < liste_sta->truc->data.sta.nb_con; ++i){
+    if(!strcmp(liste->truc->data.sta.nom, sta))        // strcomp vaut 0 si les char* sont égaux
+        return 1;
 
-    //}
+    if(liste->suiv)                                     // Si la liste possède un élément suivant 
+        return sta_dans_liste(liste->suiv, sta);        // On cherche sur cet élément suivant 
+
+    return 0;                                           // Cas où la liste n'est composée de qu'un seul élément différent de sta
 }
 
 
@@ -397,6 +489,19 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 //     printf("Longitude max : %f\n", limite_se.lon);
 //     printf("Latitude min : %f\n", limite_se.lat);
 
+    //Revoir detruire ! (Je comprend pas pk ça marche pas)
+    /*detruire_liste_et_truc(new);
+
+    affiche_station(new); //Normallement affiche ("Liste vide")
+
+
+    //N'affiche pas, donc tout n'a pas bien été desalloué
+    if(new==NULL){
+    printf("Tout a bien été désalloué !");
+    }*/
+
+    //printf("\n---FIN STATION---\n");
+
 //     //Revoir detruire ! (Je comprend pas pk ça marche pas)
 //     //detruire_liste_et_truc(new);
 
@@ -420,6 +525,19 @@ void dijkstra(Un_elem* liste_sta, Un_truc* sta_dep){
 
 //     printf("\n---DEBUT CONNEXION---\n\n");
 
+    /*lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
+    
+    printf("Verification tableau de connexion des stations:\n");
+    
+    //Vérification Tableau de Connexion pour Gares
+    Un_truc* g = chercher_station(abr, "Gares");
+    
+    for(int i=0; i<(g->data.sta.nb_con); i++){
+        Un_truc* p = g->data.sta.tab_con[i];
+        printf("%s - %s\n", p->data.con.sta_dep->data.sta.nom, p->data.con.sta_arr->data.sta.nom);
+    }
+    //A voir après vu que c'est un tableau de connexion on peut pas print les connexions
+=======
 //     lire_connexions("connexion.csv", abr); //Je me permet de mettre l'arbre en + (à voir pour la suite)
 //     /*
 //     printf("Verification tableau de connexion des stations:\n");
