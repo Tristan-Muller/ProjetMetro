@@ -15,6 +15,9 @@ Ce dossier contient les fonctions nécessaires à la mise en place d'une simulat
 Le fichier Makefile permet l'exectution du programme, et contient les différentes instructions pour la compilations
     Pour compiler le programme, entrer $ make dans la ligne de commande
     Pour executer le programme, entrer $ make Do dans la ligne de commande
+
+    Pour compiler le programme avec gdb, entre $ make debugg.o
+    Pour lancer le programme avec gdb, entrer $ make Do_debugg
     Pour effacer les fichiers compilés, entrer $ make clean puis relancez les deux instructions précédentes
 
 

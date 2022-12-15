@@ -9,6 +9,13 @@ Do : main.o
 	./main
 
 
+Do_debugg : debugg.o
+	gdb main
+
+debugg.o : abr.o aqr.o ligne.o liste.o truc.o
+	gcc -g -o main main.c
+
+
 
 main.o : abr.o aqr.o ligne.o liste.o truc.o
 	gcc -Wall -o main main.c
